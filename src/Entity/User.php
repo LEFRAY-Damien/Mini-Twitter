@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -39,6 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
+        $this->tweets = new ArrayCollection();
     }
 
     #[ORM\Column]
@@ -46,6 +49,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, Tweet>
+     */
+    #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'userid')]
+    private Collection $tweets;
 
     public function getId(): ?int
     {
@@ -160,6 +169,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tweet>
+     */
+    public function getTweets(): Collection
+    {
+        return $this->tweets;
+    }
+
+    public function addTweet(Tweet $tweet): static
+    {
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets->add($tweet);
+            $tweet->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): static
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUserid() === $this) {
+                $tweet->setUserid(null);
+            }
+        }
 
         return $this;
     }
