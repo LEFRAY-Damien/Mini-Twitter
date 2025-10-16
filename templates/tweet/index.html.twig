@@ -24,7 +24,6 @@
                 <td>{{ tweet.updatedAt ? tweet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}">show</a>
-                    <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
