@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Tweet{% endblock %}
+
+{% block body %}
+    <h1>Create new Tweet</h1>
+
+    {{ include('tweet/_form.html.twig') }}
+
+    <a href="{{ path('app_tweet_index') }}">back to list</a>
+{% endblock %}
