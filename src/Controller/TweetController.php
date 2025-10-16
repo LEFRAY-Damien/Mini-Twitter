@@ -18,7 +18,7 @@ final class TweetController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route(name: 'app_tweet_index', methods: ['GET'])]
     public function index(TweetRepository $tweetRepository): Response
-    {
+    {   
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAll(),
         ]);
@@ -33,6 +33,7 @@ final class TweetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $tweet->setUser($this->getUser());
             $entityManager->persist($tweet);
             $entityManager->flush();
 

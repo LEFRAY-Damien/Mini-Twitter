@@ -1,11 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Tweet{% endblock %}
+{% block title %}New Tweet
+{% endblock %}
 
 {% block body %}
-    <h1>Create new Tweet</h1>
+	<div class="w-full h-screen bg-[#15202B]">
+		<div class="pt-5 flex items-center justify-center flex-col">
+			<h1 class="text-white pb-5">Écrire un tweet</h1>
 
-    {{ include('tweet/_form.html.twig') }}
+			{{ include('tweet/_form.html.twig') }}
 
-    <a href="{{ path('app_tweet_index') }}">back to list</a>
+		</div>
+        <a class="bg-[#1DA1F2] text-white p-3 rounded-lg" href="{{ path('app_tweet_index')}}">Retour au fil d'actualités</a>
+	</div>
 {% endblock %}
