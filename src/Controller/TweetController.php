@@ -44,7 +44,7 @@ final class TweetController extends AbstractController
             'form' => $form,
         ]);
     }
-
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
     public function show(Tweet $tweet): Response
     {
