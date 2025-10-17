@@ -40,21 +40,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
         $this->tweets = new ArrayCollection();
     }
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     /**
      * @var Collection<int, Tweet>
      */
-    #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'userid')]
+    #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'user')]
     private Collection $tweets;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
 
@@ -163,18 +160,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Tweet>
      */
@@ -187,23 +172,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->tweets->contains($tweet)) {
             $this->tweets->add($tweet);
-            $tweet->setUserid($this);
+            $tweet->setUser($this);
         }
 
         return $this;
     }
 
     public function removeTweet(Tweet $tweet): static
-        {
-            if ($this->tweets->removeElement($tweet)) {
-                // set the owning side to null (unless already changed)
-                if ($tweet->getUserid() === $this) {
-                    $tweet->setUserid(null);
-                }
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
             }
+        }
 
-            return $this;
+        return $this;
     }
+
+    
 
     public function getAvatar(): ?string
     {

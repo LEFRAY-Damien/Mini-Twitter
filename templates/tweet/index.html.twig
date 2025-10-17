@@ -1,39 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweet index{% endblock %}
+{% block title %}Tweet index
+{% endblock %}
 
 {% block body %}
-    <h1>Tweet index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Content</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tweet in tweets %}
-            <tr>
-                <td>{{ tweet.id }}</td>
-                <td>{{ tweet.content }}</td>
-                <td>{{ tweet.createdAt ? tweet.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ tweet.updatedAt ? tweet.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}">show</a>
-                    <a href="{{ path('app_tweet_edit', {'id': tweet.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<div class="w-full h-screen bg-[#15202B]">
 
-    <a href="{{ path('app_tweet_new') }}">Create new</a>
+		<div class="pt-5 flex items-center justify-center flex-col">
+
+			<a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-lg" href="{{ path('app_tweet_new')}}">Écrire un tweet</a>
+
+			{% for tweet in tweets %}
+
+				<div class="p-3 bg-[#15202B] text-white border-1 border-neutral-600 w-130 ">
+					<div>
+						<span class="font-bold">{{ tweet.user.username }}</span>
+						<span>
+							·
+						</span>
+						<span class="text-neutral-400">{{ tweet.createdAt|date('d/m/Y H:i:s', "Europe/Paris") }}</span>
+					</div>
+					<div class="pt-3">
+						<p>{{ tweet.content }}</p>
+					</div>
+				</div>
+			{% else %}
+				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
+			{% endfor %}
+		</div>
+
+	</div>
 {% endblock %}

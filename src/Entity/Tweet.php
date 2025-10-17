@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TweetRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TweetRepository::class)]
 class Tweet
@@ -15,17 +16,22 @@ class Tweet
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\Length(
+        max: 280,
+        maxMessage: 'Vous ne pouvez pas écrire un tweet de plus de {{ limit }} caractères',
+    )]
     private ?string $content = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
-
     #[ORM\ManyToOne(inversedBy: 'tweets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userid = null;
+    private ?User $user = null;
+
+    public function __construct() {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -56,26 +62,14 @@ class Tweet
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUser(): ?User
     {
-        return $this->updatedAt;
+        return $this->user;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function setUser(?User $user): static
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getUserid(): ?User
-    {
-        return $this->userid;
-    }
-
-    public function setUserid(?User $userid): static
-    {
-        $this->userid = $userid;
+        $this->user = $user;
 
         return $this;
     }
