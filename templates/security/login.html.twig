@@ -49,12 +49,20 @@
 					<form method="post" class="w-full space-y-5">
 						<div>
 							<label for="username" class="block text-sm font-medium text-white">Email</label>
+<<<<<<< Updated upstream
 							<input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm text-white">
+=======
+							<input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus class="mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm">
+>>>>>>> Stashed changes
 						</div>
 
 						<div>
 							<label for="password" class="block text-sm font-medium text-white">Mot de passe</label>
+<<<<<<< Updated upstream
 							<input type="password" name="_password" id="password" autocomplete="current-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm text-white">
+=======
+							<input type="password" name="_password" id="password" autocomplete="current-password" required class="mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm">
+>>>>>>> Stashed changes
 						</div>
 
 						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
