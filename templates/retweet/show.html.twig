@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Retweet{% endblock %}
+
+{% block body %}
+    <h1>Retweet</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ retweet.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_retweet_index') }}">back to list</a>
+
+    <a href="{{ path('app_retweet_edit', {'id': retweet.id}) }}">edit</a>
+
+    {{ include('retweet/_delete_form.html.twig') }}
+{% endblock %}
