@@ -55,6 +55,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'userid')]
     private Collection $tweets;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     public function getId(): ?int
     {
@@ -192,13 +194,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function removeTweet(Tweet $tweet): static
-    {
-        if ($this->tweets->removeElement($tweet)) {
-            // set the owning side to null (unless already changed)
-            if ($tweet->getUserid() === $this) {
-                $tweet->setUserid(null);
+        {
+            if ($this->tweets->removeElement($tweet)) {
+                // set the owning side to null (unless already changed)
+                if ($tweet->getUserid() === $this) {
+                    $tweet->setUserid(null);
+                }
             }
-        }
+
+            return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }

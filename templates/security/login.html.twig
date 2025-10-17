@@ -1,38 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion
+{% endblock %}
 
 {% block body %}
-    <form method="post">
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+	<div
+		class="flex flex-col md:flex-row items-stretch justify-center h-screen w-full gap-0">
+		<!-- Bloc Connexion -->
+		<div class="w-full md:w-1/2 bg-[#15202B] shadow-lg p-8 flex flex-col justify-center">
+			{% if error %}
+				<div class="mb-4 p-3 text-red-700 bg-red-100 rounded">
+					{{ error.messageKey|trans(error.messageData, 'security') }}
+				</div>
+			{% endif %}
 
-        {% if app.user %}
-            <div class="mb-3">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-            </div>
-        {% endif %}
+			{% if app.user %}
+				<div class="mb-4 p-3 text-blue-700 bg-blue-100 rounded">
+					Vous êtes connecté en tant que
+					<strong>{{ app.user.userIdentifier }}</strong>,
+					<a href="{{ path('app_logout') }}" class="text-blue-800 underline">Se déconnecter</a>
+				</div>
+			{% endif %}
 
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+			<h1 class="text-3xl font-bold text-center text-white mb-6">Connexion à Mini Twitter</h1>
 
-        {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+			<div class="max-w-md w-full bg-[#192734] p-8 rounded-2xl shadow-lg justify-center items-center mx-auto">
+				<div class="flex flex-col items-center mx-auto">
+					<svg viewbox="0 0 24 24" fill="#1DA1F2" class="w-10 h-10">
+						<g>
+							<path d="M23.954 4.569c-.885.389-1.83.654-2.825.775
+																							                            1.014-.611 1.794-1.574 2.163-2.723-.951.564-2.005.974-3.127
+																							                            1.195-.897-.959-2.178-1.559-3.594-1.559-2.717
+																							                            0-4.924 2.208-4.924 4.924 0 .39.045.765.127
+																							                            1.124-4.09-.205-7.719-2.165-10.148-5.144-.424.729-.666
+																							                            1.577-.666 2.476 0 1.708.87 3.216 2.188
+																							                            4.099-.807-.026-1.566-.248-2.229-.616v.062c0
+																							                            2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.317
+																							                            0-.626-.03-.928-.086.627 1.956 2.444 3.379 4.6
+																							                            3.421-1.68 1.318-3.809 2.105-6.115
+																							                            2.105-.398 0-.79-.023-1.175-.069 2.179
+																							                            1.397 4.768 2.212 7.557 2.212 9.054
+																							                            0 14-7.496 14-13.986 0-.21-.004-.423-.014-.633.961-.689
+																							                            1.8-1.56 2.46-2.548z"></path>
+						</g>
+					</svg>
 
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-        #}
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+					<form method="post" class="w-full space-y-5">
+						<div>
+							<label for="username" class="block text-sm font-medium text-white">Email</label>
+							<input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm">
+						</div>
+
+						<div>
+							<label for="password" class="block text-sm font-medium text-white">Mot de passe</label>
+							<input type="password" name="_password" id="password" autocomplete="current-password" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-full shadow-sm focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm">
+						</div>
+
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+						<button type="submit" class="w-full py-2 px-4 bg-[#1DA1F2] text-white font-bold rounded-full shadow hover:bg-[#0d95e8] focus:outline-none focus:ring-2 focus:ring-[#1DA1F2] focus:ring-offset-2 transition-colors">
+							Connexion
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Deuxième Bloc -->
+		<div class="w-full md:w-1/2 bg-[#1DA1F2] shadow-lg p-8 flex items-center justify-center">
+			<p class="text-center text-white text-sm">
+				Pas de compte ?
+				<a href="/register" class="font-semibold underline">Inscrivez-vous</a>
+			</p>
+		</div>
+	</div>
 {% endblock %}
