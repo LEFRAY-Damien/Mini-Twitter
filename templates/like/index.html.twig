@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Like index{% endblock %}
+
+{% block body %}
+    <h1>Like index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for like in likes %}
+            <tr>
+                <td>{{ like.id }}</td>
+                <td>
+                    <a href="{{ path('app_like_show', {'id': like.id}) }}">show</a>
+                    <a href="{{ path('app_like_edit', {'id': like.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_like_new') }}">Create new</a>
+{% endblock %}

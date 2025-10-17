@@ -18,7 +18,7 @@ class Like
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
-    private ?Tweet $relation = null;
+    private ?Tweet $tweet = null;
 
     public function getId(): ?int
     {
@@ -37,14 +37,14 @@ class Like
         return $this;
     }
 
-    public function getRelation(): ?Tweet
+    public function getTweet(): ?Tweet
     {
-        return $this->relation;
+        return $this->tweet;
     }
 
-    public function setRelation(?Tweet $relation): static
+    public function setTweet(?Tweet $tweet): static
     {
-        $this->relation = $relation;
+        $this->tweet = $tweet;
 
         return $this;
     }

@@ -34,7 +34,7 @@ class Tweet
     /**
      * @var Collection<int, Like>
      */
-    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'relation')]
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'tweet')]
     private Collection $likes;
 
     public function __construct() {
@@ -95,7 +95,7 @@ class Tweet
     {
         if (!$this->likes->contains($like)) {
             $this->likes->add($like);
-            $like->setRelation($this);
+            $like->setTweet($this);
         }
 
         return $this;
@@ -105,8 +105,8 @@ class Tweet
     {
         if ($this->likes->removeElement($like)) {
             // set the owning side to null (unless already changed)
-            if ($like->getRelation() === $this) {
-                $like->setRelation(null);
+            if ($like->getTweet() === $this) {
+                $like->setTweet(null);
             }
         }
 
