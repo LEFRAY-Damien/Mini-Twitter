@@ -3,7 +3,9 @@
 {% block title %}Tweet index
 {% endblock %}
 
+
 {% block body %}
+	<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
 
 	<div class="w-full h-screen bg-[#15202B]">
 
@@ -24,9 +26,10 @@
 					<div class="pt-3">
 						<p>{{ tweet.content }}</p>
 					</div>
-					<div class="pt-3">
-						<span>🔃 {{ tweet.retweets.count }}</span>
-					</div>
+					<a href="{{ path('app_retweet_add', {'id': tweet.id})}}" class="pt-3 flex items-center">
+						<i class="icon-repeat-2"></i>
+						<span class="ml-1">{{ tweet.retweets.count }}</span>
+					</a>
 				</div>
 			{% else %}
 				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>

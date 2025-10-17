@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Retweet;
+use App\Entity\Tweet;
 use App\Form\RetweetType;
 use App\Repository\RetweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -71,11 +72,31 @@ final class RetweetController extends AbstractController
     #[Route('/{id}', name: 'app_retweet_delete', methods: ['POST'])]
     public function delete(Request $request, Retweet $retweet, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$retweet->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $retweet->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($retweet);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_retweet_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/add/{id}', name: 'app_retweet_add', methods: ['GET'])]
+    public function retweet(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    {
+        $repository = $entityManager->getRepository(Retweet::class);
+        $retweet = new Retweet();
+        $retweet->setTweet($tweet);
+        $retweet->setUser($this->getUser());
+
+        if (!$repository->findOneBy([
+            'tweet' => $tweet->getId(),
+            'user' => $retweet->getUser()->getId()
+        ])) {
+            $entityManager->persist($retweet);
+            $entityManager->flush();
+        }
+
+
+        return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
     }
 }
