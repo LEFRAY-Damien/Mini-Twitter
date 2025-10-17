@@ -41,6 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
         $this->tweets = new ArrayCollection();
+        $this->tweet = new ArrayCollection();
     }
 
     #[ORM\Column]
@@ -54,6 +55,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'user')]
+    private Collection $tweet;
 
     public function getId(): ?int
     {
@@ -202,5 +209,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getTweet(): Collection
+    {
+        return $this->tweet;
     }
 }
