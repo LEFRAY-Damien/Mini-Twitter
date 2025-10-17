@@ -52,7 +52,7 @@
 
                 <div>
                     {{ form_widget(registrationForm.username, {'attr': {
-                        'placeholder': 'Email',
+                        'placeholder': 'Username',
                         'class': 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
                     }}) }}
                     {{ form_errors(registrationForm.username, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
@@ -60,7 +60,7 @@
 
                 <div>
                     {{ form_widget(registrationForm.email, {'attr': {
-                        'placeholder': 'Username',
+                        'placeholder': 'Email',
                         'class': 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
                     }}) }}
                     {{ form_errors(registrationForm.email, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
