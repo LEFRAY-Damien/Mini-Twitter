@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,14 +40,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
-        $this->updatedAt = new \DateTimeImmutable();
+        $this->tweets = new ArrayCollection();
     }
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    /**
+     * @var Collection<int, Tweet>
+     */
+    #[ORM\OneToMany(targetEntity: Tweet::class, mappedBy: 'user')]
+    private Collection $tweets;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $avatar = null;
 
     public function getId(): ?int
     {
@@ -152,14 +160,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    /**
+     * @return Collection<int, Tweet>
+     */
+    public function getTweets(): Collection
     {
-        return $this->updatedAt;
+        return $this->tweets;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    public function addTweet(Tweet $tweet): static
     {
-        $this->updatedAt = $updatedAt;
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets->add($tweet);
+            $tweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): static
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
 
         return $this;
     }
