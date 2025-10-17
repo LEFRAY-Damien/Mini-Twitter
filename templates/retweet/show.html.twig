@@ -11,6 +11,18 @@
                 <th>Id</th>
                 <td>{{ retweet.id }}</td>
             </tr>
+            <tr>
+                <th>Auteur du tweet</th>
+                <td>{{ retweet.tweet.user.username }}</td>
+            </tr>
+            <tr>
+                <th>Contenu du tweet</th>
+                <td>{{ retweet.tweet.content }}</td>
+            </tr>
+            <tr>
+                <th>Retweeté par</th>
+                <td>{{ retweet.user.username }}</td>
+            </tr>
         </tbody>
     </table>
 
