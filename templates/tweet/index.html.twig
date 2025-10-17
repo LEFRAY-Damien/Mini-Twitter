@@ -25,10 +25,14 @@
 						<p>{{ tweet.content }}</p>
 					</div>
 					<a id="likeBtn" href="{{ path('app_like_new', {'id':tweet.id})}}" class="text-gray-400 hover:text-red-500 transition-colors duration-300 text-2xl">
-						<i class="fa-solid fa-heart"></i>
+						<i class="fa-solid fa-heart 
+						{% for like in tweet.likes %}
+							{% if app.user == like.user %}
+								text-red-500
+							{% endif %}
+						{% endfor %}"></i>
 						<span class="text-white text-lg ml-1">{{ tweet.likes.count }}</span>
 					</a>
-
 				</div>
 			{% else %}
 				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>

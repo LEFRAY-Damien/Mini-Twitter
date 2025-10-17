@@ -34,6 +34,10 @@ final class LikeController extends AbstractController
         if (!$repository->findOneBy(['user' => $like->getUser()->getId(), 'tweet' => $tweet->getId()])) {
             $entityManager->persist($like);
             $entityManager->flush();
+        } else {
+            $existingLike = $repository->findOneBy(['user' => $like->getUser()->getId(), 'tweet' => $tweet->getId()]);
+            $entityManager->remove($existingLike);
+            $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
