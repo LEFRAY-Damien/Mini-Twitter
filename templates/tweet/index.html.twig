@@ -17,14 +17,18 @@
 
        
 
-        <a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-lg hover:bg-[#1A91DA]" href="{{ path('app_tweet_new') }}">
+        <a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-full hover:bg-[#1A91DA]" href="{{ path('app_tweet_new') }}">
             Écrire un tweet
         </a>
 
         {% if tweets is not empty %}
-        {% for tweet in tweets %}
+        <div>
+
+            {% for tweet in tweets %}
+        
+        
         <div
-            class="relative p-4 bg-[#15202B] text-white border border-neutral-700 w-130 hover:bg-[#192734] transition mb-4">
+            class="relative p-4 bg-[#15202B] text-white border-x border-b first:border-t border-neutral-700 w-130 hover:bg-[#192734] transition">
             <div class="flex justify-between items-start">
                 <div>
                     <span class="font-bold">{{ tweet.user.username }}</span>
@@ -90,7 +94,9 @@
                     </a>
                 </div>
         </div>
+        
         {% endfor %}
+        </div>
         {% else %}
         <span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
         {% endif %}
