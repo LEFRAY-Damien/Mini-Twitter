@@ -57,6 +57,9 @@ class Tweet
     #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'tweet')]
     private Collection $retweets;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $media = null;
+
 
 
     public function getId(): ?int
@@ -178,6 +181,18 @@ class Tweet
                 $retweet->setTweet(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMedia(): ?string
+    {
+        return $this->media;
+    }
+
+    public function setMedia(?string $media): static
+    {
+        $this->media = $media;
 
         return $this;
     }
