@@ -7,10 +7,12 @@ use App\Form\TweetType;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/tweet')]
 final class TweetController extends AbstractController
@@ -26,7 +28,7 @@ final class TweetController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/new', name: 'app_tweet_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $tweet = new Tweet();
         $form = $this->createForm(TweetType::class, $tweet);
@@ -34,6 +36,25 @@ final class TweetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $tweet->setUser($this->getUser());
+
+            $mediaFile = $form->get('media')->getData();
+
+            if ($mediaFile) {
+                $originalFilename = pathinfo($mediaFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $mediaFile->guessExtension();
+
+                try {
+                    $mediaFile->move(
+                        $this->getParameter('media_directory'),
+                        $newFilename
+                    );
+                    $tweet->setMedia($newFilename);
+                } catch (FileException $e) {
+                    $this->addFlash('error', 'Erreur lors de l’upload du media.');
+                }
+            }
+
             $entityManager->persist($tweet);
             $entityManager->flush();
 
