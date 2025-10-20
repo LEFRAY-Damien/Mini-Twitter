@@ -50,7 +50,7 @@ final class ProfileController extends AbstractController
                         $this->getParameter('avatars_directory'),
                         $newFilename
                     );
-                    $user->setAvatar($newFilename); // ici, après le move
+                    $user->setAvatar($newFilename);
                 } catch (FileException $e) {
                     $this->addFlash('error', 'Erreur lors de l’upload de l’avatar.');
                 }

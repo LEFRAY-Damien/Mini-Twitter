@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Report;
+use App\Entity\Retweet;
 use App\Entity\Tweet;
 use App\Entity\User;
 use App\Repository\ReportRepository;
@@ -32,7 +33,7 @@ final class AdminController extends AbstractController
             'reports' => $reports
         ]);
     }
-    
+
     #[Route('/listUsers', name: 'app_admin_list_user')]
     public function listUsers(UserRepository $userRepo): Response
     {
@@ -42,7 +43,7 @@ final class AdminController extends AbstractController
         ]);
     }
     //supprimer report
-    #[Route(('/report/{id}/delete'),name: 'app_admin_delete_report', methods: ['POST'])]
+    #[Route(('/report/{id}/delete'), name: 'app_admin_delete_report', methods: ['POST'])]
     public function deleteReport(Report $report, EntityManagerInterface $em): Response
     {
         $em->remove($report);
@@ -52,39 +53,48 @@ final class AdminController extends AbstractController
 
         return $this->redirectToRoute('app_admin');
     }
-    
+
     //supprimer tweet
-    #[Route(('/tweet/{id}/delete'), name: 'app_admin_delete_tweet')]
+    #[Route('/tweet/{id}/delete', name: 'app_admin_delete_tweet')]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
+        
         foreach ($tweet->getReports() as $report) {
             $em->remove($report);
         }
+        
+        foreach ($tweet->getRetweets() as $retweet) {
+            $em->remove($retweet);
+        }
 
+        foreach ($tweet->getLikes() as $like) {
+        $em->remove($like);
+        
+    }
         $em->remove($tweet);
         $em->flush();
 
-        $this->addFlash('success', 'Tweet Supprimé !');
-        
+        $this->addFlash('success', 'Tweet et retweets supprimés !');
+
         return $this->redirectToRoute('app_tweet_index');
-          
     }
+
     // Suspendre/Bannir un utilisateur (isBanned)
-        #[Route('/user/{id}/ban', name: 'app_admin_ban_user')]
-        public function banUser(User $user, EntityManagerInterface $em) : Response
-        {
-            $user->setIsBanned(true);
+    #[Route('/user/{id}/ban', name: 'app_admin_ban_user')]
+    public function banUser(User $user, EntityManagerInterface $em): Response
+    {
+        $user->setIsBanned(true);
 
-            $em->flush();
+        $em->flush();
 
-            $this->addFlash('success', "{$user->getUsername()} a été banni !");
-            
-            return $this->redirectToRoute('app_admin');
-        }
-    
+        $this->addFlash('success', "{$user->getUsername()} a été banni !");
+
+        return $this->redirectToRoute('app_admin');
+    }
+
     // Désactivé un compte utilisateurs (isActive)
     #[Route('/user/{id}/disable', name: 'app_admin_disable_user')]
-    public function disableUser(User $user, EntityManagerInterface $em) : Response
+    public function disableUser(User $user, EntityManagerInterface $em): Response
     {
         $user->setIsActive(false);
         $em->flush();
@@ -93,5 +103,4 @@ final class AdminController extends AbstractController
 
         return $this->redirectToRoute('app_admin');
     }
-
 }
