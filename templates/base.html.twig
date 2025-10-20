@@ -1,20 +1,70 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
 
+    <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
+    <script src="https://kit.fontawesome.com/a2e0e6b6d7.js" crossorigin="anonymous"></script>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
-        {% endblock %}
-    </body>
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+      {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+  </head>
+
+<body class="bg-[#15202B] text-white overflow-x-hidden min-h-screen flex">
+
+  <!-- Overlay (mobile) -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+  <!-- Sidebar -->
+  <aside
+    id="sidebar"
+    class="fixed md:static inset-y-0 left-0 w-56 bg-[#15202B] text-white flex flex-col justify-between
+           transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out
+           shadow-lg z-50"
+  >
+    {% include 'sidebar/sidebar.html.twig' %}
+  </aside>
+
+  <!-- Contenu principal -->
+  <main class="flex-1 md:pl-56 flex items-center justify-center p-6">
+    
+    <!-- Contenu centré -->
+    <div class="w-full max-w-4xl bg-[#15202B] rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
+      {% block body %}
+      {% endblock %}
+    </div>
+
+    <!-- Bouton hamburger (mobile uniquement) -->
+    <button
+      id="menuBtn"
+      class="absolute top-4 left-4 md:hidden bg-neutral-800 text-white p-2 rounded-md shadow"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </main>
+
+  <!-- Script Sidebar Responsive -->
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+
+    overlay.addEventListener('click', () => {
+      sidebar.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+  </script>
+
+</body>
+
 </html>
+
+

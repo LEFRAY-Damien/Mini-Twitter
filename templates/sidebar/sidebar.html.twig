@@ -1,0 +1,28 @@
+<div class="flex flex-col h-full bg-[#15202B] text-white">
+  <!-- Logo / Titre -->
+  <div class="p-4 text-2xl font-bold border-b border-neutral-700 text-center">
+    Mini Twitter
+  </div>
+
+  <!-- Liens -->
+  <nav class="flex-1 p-4 space-y-3">
+    <a href="{{ path('app_tweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+      <i class="fa-solid fa-house text-xl"></i> <span>Accueil</span>
+    </a>
+    <a href="{{ path('app_retweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+      <i class="fa-solid fa-retweet text-xl"></i> <span>Retweets</span>
+    </a>
+    <a href="{{ path('app_profile') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+      <i class="fa-solid fa-user text-xl"></i> <span>Profil</span>
+    </a>
+  </nav>
+
+  <!-- Déconnexion -->
+  <div class="p-4 border-t border-neutral-700">
+    <a href="{{ path('app_logout') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-600 transition">
+      <i class="fa-solid fa-right-from-bracket text-xl"></i> <span>Déconnexion</span>
+    </a>
+  </div>
+</div>
+
+
