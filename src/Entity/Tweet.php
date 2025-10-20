@@ -40,7 +40,15 @@ class Tweet
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
         $this->likes = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
     }
+    /**
+     * @var Collection<int, Retweet>
+     */
+    #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'tweet')]
+    private Collection $retweets;
+
+    
 
     public function getId(): ?int
     {
@@ -97,6 +105,22 @@ class Tweet
             $this->likes->add($like);
             $like->setTweet($this);
         }
+        return $this;
+    }
+    /**
+     * @return Collection<int, Retweet>
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): static
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets->add($retweet);
+            $retweet->setTweet($this);
+        }
 
         return $this;
     }
@@ -106,7 +130,17 @@ class Tweet
         if ($this->likes->removeElement($like)) {
             // set the owning side to null (unless already changed)
             if ($like->getTweet() === $this) {
-                $like->setTweet(null);
+               $like->setTweet(null);
+            }
+        } 
+        return $this;
+    }
+    public function removeRetweet(Retweet $retweet): static
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getTweet() === $this) {
+                $retweet->setTweet(null);
             }
         }
 
