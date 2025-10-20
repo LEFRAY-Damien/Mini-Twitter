@@ -27,21 +27,24 @@
 					<div class="pt-3">
 						<p>{{ tweet.content }}</p>
 					</div>
-					<a id="likeBtn" href="{{ path('app_like_new', {'id':tweet.id})}}" class="text-gray-400 hover:text-red-500 transition-colors duration-300 text-2xl">
-						<i class="fa-solid fa-heart 
+					<div class="flex flex-row items-center mt-3">
+					<a id="likeBtn" href="{{ path('app_like_new', {'id':tweet.id})}}" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+						<i class="fa-solid fa-heart fa-xs 
 						{% for like in tweet.likes %}
 							{% if app.user == like.user %}
 								text-red-500
 							{% endif %}
 						{% endfor %}"></i>
-						<span class="text-white text-lg ml-1">{{ tweet.likes.count }}</span>
-					<a href="{{ path('app_retweet_add', {'id': tweet.id})}}" class="mt-3 flex items-center w-fit h-fit group">
-						<i class="icon-repeat-2 group-hover:bg-gray-600 rounded-lg p-1 
+						<span class="text-white ml-1">{{ tweet.likes.count }}</span>
+					</a>
+					<a href="{{ path('app_retweet_add', {'id': tweet.id})}}" class="ml-2 flex items-center w-fit h-fit hover:text-[#1DA1F2] transition-colors duration-300">
+						<i class="icon-repeat-2 rounded-lg p-1 
 						{% for retweet in tweet.retweets %}
 							{% if(app.user == retweet.user) %} text-[#1DA1F2] {% endif %}
 						{% endfor %}"></i>
-						<span class="ml-1">{{ tweet.retweets.count }}</span>
+						<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
 					</a>
+					</div>
 				</div>
 			{% else %}
 				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
