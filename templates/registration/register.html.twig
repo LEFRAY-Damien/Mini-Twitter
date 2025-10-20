@@ -4,26 +4,20 @@
 
 {% block body %}
 <div class="h-screen flex flex-col md:flex-row">
+
     <div class="w-full md:w-1/2 bg-[#1DA1F2] shadow-lg p-8 flex text-white items-center justify-center px-8 lg:px-12">
-    {# <div class="hidden md:flex w-full md:w-1/2 bg-[#1DA1F2] text-white flex-col justify-center px-8 lg:px-12"> #}
         <div class="max-w-lg space-y-6">
             <h1 class="text-3xl md:text-4xl font-bold leading-tight">
                 Découvrez ce qui se passe dans le monde en ce moment
             </h1>
             <ul class="space-y-3 md:space-y-4 text-base md:text-lg font-medium">
-                <li class="flex items-center space-x-2 md:space-x-3">
-                    <span>Suivez ce qui vous intéresse</span>
-                </li>
-                <li class="flex items-center space-x-2 md:space-x-3">
-                    <span>Ecoutez de quoi les gens nous parlent</span>
-                </li>
-                <li class="flex items-center space-x-2 md:space-x-3">
-                    <span>Rejoingez des conversations</span>
-                </li>
+                <li>Suivez ce qui vous intéresse</li>
+                <li>Écoutez de quoi les gens nous parlent</li>
+                <li>Rejoignez des conversations</li>
             </ul>
         </div>
     </div>
-    {# <div class="w-full md:w-1/2 bg-[#15202B] flex items-center justify-center px-4 sm:px-6"> #}
+
     <div class="w-full md:w-1/2 bg-[#15202B] shadow-lg p-8 flex items-center justify-center px-4 sm:px-6">
         <div class="max-w-md w-full bg-[#192734] p-6 sm:p-8 rounded-2xl shadow-lg">
             <div class="flex justify-center mb-4 sm:mb-6">
@@ -55,7 +49,9 @@
                         'placeholder': 'Pseudonyme',
                         'class': 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
                     }}) }}
-                    {{ form_errors(registrationForm.username, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    {% for error in registrationForm.username.vars.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+                    {% endfor %}
                 </div>
 
                 <div>
@@ -63,21 +59,31 @@
                         'placeholder': 'Email',
                         'class': 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
                     }}) }}
-                    {{ form_errors(registrationForm.email, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+                    {% for error in registrationForm.email.vars.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+                    {% endfor %}
                 </div>
 
-                <div>
-                    {{ form_widget(registrationForm.plainPassword, {'attr': {
-                        'placeholder': 'Mot de Passe',
-                        'class': 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
-                    }}) }}
-                    {{ form_errors(registrationForm.plainPassword, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
-                </div>
+                    <div>
+                        {{ form_widget(registrationForm.plainPassword, {
+                            attr: {
+                                placeholder: 'Mot de passe',
+                                class: 'mt-1 block w-full px-3 py-2 bg-[#15202B] text-white border border-gray-600 rounded-md focus:ring-[#1DA1F2] focus:border-[#1DA1F2] sm:text-sm'
+                            }
+                        }) }}
+
+                        {% for error in registrationForm.plainPassword.vars.errors %}
+                            <p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+                        {% endfor %}
+                    </div>
 
                 <div class="flex items-center">
                     {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-[#1DA1F2] border-gray-600 rounded bg-[#15202B]'}}) }}
                     {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'ml-2 block text-sm text-gray-300'}}) }}
                 </div>
+                {% for error in registrationForm.agreeTerms.vars.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error.message }}</p>
+                {% endfor %}
 
                 <div>
                     <button type="submit"
