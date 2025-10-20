@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TweetRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -29,8 +31,15 @@ class Tweet
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'tweet')]
+    private Collection $reports;
+
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -70,6 +79,36 @@ class Tweet
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setTweet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getTweet() === $this) {
+                $report->setTweet(null);
+            }
+        }
 
         return $this;
     }

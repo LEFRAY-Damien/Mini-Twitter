@@ -1,27 +1,42 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweet{% endblock %}
+{% block title %}Détails du Tweet{% endblock %}
 
 {% block body %}
-    <h1>Tweet</h1>
+<div class="w-full min-h-screen bg-[#15202B] p-6 flex flex-col items-center">
+    <h1 class="text-3xl font-bold text-white mb-8">Détails du Tweet</h1>
 
-    <table class="table">
-        <tbody>
-        <tr>
-            <th>{{ tweet.user.username }}</th>
-        </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ tweet.content }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ tweet.createdAt|date('d-m-Y H:i:s', "Europe/Paris") }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_tweet_index') }}">back to list</a>
-
-    {{ include('tweet/_delete_form.html.twig') }}
+    <div class="w-full max-w-2xl bg-[#192734] p-6 rounded-lg shadow-lg border border-neutral-700 hover:bg-[#1c2732] transition duration-200">
+        <div class="flex items-center space-x-4 mb-4">
+            {% if tweet.user.avatar %}
+                <img src="{{ asset('Uploads/avatars/' ~ tweet.user.avatar) }}" alt="Avatar de {{ tweet.user.username }}"
+                     class="w-10 h-10 rounded-full object-cover border border-neutral-700">
+            {% else %}
+                <div class="w-10 h-10 rounded-full bg-neutral-600 flex items-center justify-center text-white text-sm font-bold">
+                    {{ tweet.user.username|slice(0, 1)|upper }}
+                </div>
+            {% endif %}
+            <div>
+                <span class="font-bold text-white text-lg">{{ tweet.user.username }}</span>
+                <span class="text-neutral-400 text-sm block">{{ tweet.createdAt|date('d/m/Y H:i', 'Europe/Paris') }}</span>
+            </div>
+        </div>
+        <div class="mb-4">
+            <p class="text-white">{{ tweet.content }}</p>
+        </div>
+        <div class="flex justify-between items-center">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_admin') }}"
+                   class="px-4 py-2 bg-[#1DA1F2] text-white rounded-lg hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Retour à l'admin
+                </a>
+            {% else %}
+                <a href="{{ path('app_tweet_index') }}"
+                   class="px-4 py-2 bg-[#1DA1F2] text-white rounded-lg hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Retour à la liste
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -65,4 +65,18 @@ final class TweetController extends AbstractController
 
         return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    //    #[Route('/listTweets/{id}', name: 'app_tweet_show')]
+    //     public function showTweet(int $id, TweetRepository $tweetRepository  ) : Response
+    //     {
+    //         $tweetShow = $tweetRepository->find($id);
+    //         if (!$tweet) {
+    //             throw $this->createNotFoundException('Tweet Non Trouvé');
+    //         }
+
+    //         return $this->render('tweet/index.html.twig', [
+    //             'tweet' => $tweet
+    //         ])
+    //     }
+    
 }

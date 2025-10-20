@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="w-full min-h-screen bg-[#15202B] p-6 flex flex-col items-center">
+    <h1 class="text-2xl font-bold text-white mb-6">Gestion des Utilisateurs</h1>
+
+    {% if users is not empty %}
+    <div class="w-full max-w-4xl space-y-4">
+        {% for user in users %}
+        <div class="bg-[#192734] p-4 rounded-lg flex justify-between items-center hover:bg-[#1c2732] transition">
+            <div class="flex flex-col">
+                {% if user.avatar %}
+                <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar de {{ user.username }}"
+                    class="w-5 h-5 rounded-full">
+                </div>
+                {% endif %}
+                <span class="font-bold text-white">{{ user.username }}</span>
+                <span class="text-neutral-400 text-sm">Créé le {{ user.createdAt|date('d/m/Y H:i') }}</span>
+                <span class="text-neutral-400 text-sm">Rôle: {{ user.roles|join(', ') }}</span>
+            </div>
+
+            <div class="flex space-x-2">
+                <form action="{{ path('app_admin_ban_user', {id: user.id}) }}" method="post"
+                    onsubmit="return confirm('Voulez-vous vraiment bannir cet utilisateur ?');">
+                    <button type="submit"
+                        class="px-3 py-1 bg-[#1DA1F2] text-white rounded hover:bg-blue-600 transition">
+                        Bannir
+                    </button>
+                </form>
+
+                <form action="{{ path('app_admin_disable_user', {id: user.id}) }}" method="post"
+                    onsubmit="return confirm('Voulez-vous vraiment restreindre cet utilisateur ?');">
+                    <button type="submit"
+                        class="px-3 py-1 bg-[#15202B] text-white border border-[#1DA1F2] rounded hover:bg-[#1DA1F2] hover:text-[#15202B] transition">
+                        Suspendre
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-neutral-400 mt-10">
+        Aucun utilisateur trouvé...
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

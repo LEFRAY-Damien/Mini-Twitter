@@ -1,34 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweet index
-{% endblock %}
+{% block title %}Tweet index{% endblock %}
 
 {% block body %}
 
-	<div class="w-full h-screen bg-[#15202B]">
+<div class="w-full min-h-screen bg-[#15202B]">
 
-		<div class="pt-5 flex items-center justify-center flex-col">
+    <div class="pt-5 flex items-center justify-center flex-col">
 
-			<a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-lg" href="{{ path('app_tweet_new')}}">Écrire un tweet</a>
+        <a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-lg hover:bg-[#1A91DA]"
+           href="{{ path('app_tweet_new') }}">
+            Écrire un tweet
+        </a>
 
-			{% for tweet in tweets %}
+        {% if tweets is not empty %}
+            {% for tweet in tweets %}
+                <div class="relative p-4 bg-[#15202B] text-white border border-neutral-700 w-130 hover:bg-[#192734] transition mb-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="font-bold">{{ tweet.user.username }}</span>
+                            <span class="text-neutral-500">·</span>
+                            <span class="text-neutral-400">{{ tweet.createdAt|date('d/m/Y H:i', "Europe/Paris") }}</span>
+                        </div>
 
-				<div class="p-3 bg-[#15202B] text-white border-1 border-neutral-600 w-130 ">
-					<div>
-						<span class="font-bold">{{ tweet.user.username }}</span>
-						<span>
-							·
-						</span>
-						<span class="text-neutral-400">{{ tweet.createdAt|date('d/m/Y H:i:s', "Europe/Paris") }}</span>
-					</div>
-					<div class="pt-3">
-						<p>{{ tweet.content }}</p>
-					</div>
-				</div>
-			{% else %}
-				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
-			{% endfor %}
-		</div>
+                        <div class="relative">
+                            <button type="button" class="text-neutral-400 hover:text-white"
+                                    onclick="toggleMenu('{{ tweet.id }}')">
+                                ⋯
+                            </button>
 
-	</div>
+                            <div id="menu-{{ tweet.id }}"
+                                 class="hidden absolute right-0 mt-2 w-40 bg-[#192734] border border-neutral-700 rounded-lg shadow-lg z-10">
+                                {% if app.user %}
+                                    {% set dejaSignale = false %}
+                                    {% for r in tweet.reports %}
+                                        {% if r.reported == app.user %}
+                                            {% set dejaSignale = true %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if dejaSignale %}
+                                        <button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">
+                                            Déjà signalé
+                                        </button>
+                                    {% else %}
+                                        <form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
+                                            <button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">
+                                                Signaler
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-3">
+                        <p>{{ tweet.content }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+function toggleMenu(id) {
+    const menu = document.getElementById('menu-' + id);
+    document.querySelectorAll('[id^="menu-"]').forEach(m => {
+        if (m !== menu) m.classList.add('hidden');
+    });
+    menu.classList.toggle('hidden');
+}
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
+        document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+    }
+});
+</script>
+
 {% endblock %}

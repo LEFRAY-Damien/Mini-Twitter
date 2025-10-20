@@ -41,6 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct() {
         $this->createdAt = new \DateTimeImmutable();
         $this->tweets = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     #[ORM\Column]
@@ -54,6 +55,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatar = null;
+
+    /**
+     * @var Collection<int, Report>
+     */
+    #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'reported')]
+    private Collection $reports;
+
+    #[ORM\Column]
+    private ?bool $isBanned = null;
+
+    #[ORM\Column]
+    private ?bool $isActive = null;
 
     public function getId(): ?int
     {
@@ -200,6 +213,60 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?string $avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setReported($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getReported() === $this) {
+                $report->setReported(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isBanned(): ?bool
+    {
+        return $this->isBanned;
+    }
+
+    public function setIsBanned(bool $isBanned): static
+    {
+        $this->isBanned = $isBanned;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }
