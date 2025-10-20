@@ -14,9 +14,10 @@
 
 			<a class="bg-[#1DA1F2] text-white p-3 mb-4 rounded-lg" href="{{ path('app_tweet_new')}}">Écrire un tweet</a>
 
+			<div>
 			{% for tweet in tweets %}
 
-				<div class="p-3 bg-[#15202B] text-white border-1 border-neutral-600 w-130 ">
+				<div class="p-3 bg-[#15202B] text-white border-x-1 border-b-1 first:border-t-1 border-neutral-600 w-130 ">
 					<div>
 						<span class="font-bold">{{ tweet.user.username }}</span>
 						<span>
@@ -49,6 +50,7 @@
 			{% else %}
 				<span class="pt-5 text-neutral-400">Personne n'a encore écrit de tweet.</span>
 			{% endfor %}
+			</div>
 		</div>
 
 	</div>
