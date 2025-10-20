@@ -37,10 +37,27 @@ class Tweet
     #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'tweet')]
     private Collection $reports;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->createdAt = new \DateTimeImmutable();
         $this->reports = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+        $this->retweets = new ArrayCollection();
     }
+    /**
+     *  @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'tweet')]
+    private Collection $likes;
+
+
+    /**
+     * @var Collection<int, Retweet>
+     */
+    #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'tweet')]
+    private Collection $retweets;
+
+
 
     public function getId(): ?int
     {
@@ -97,6 +114,38 @@ class Tweet
             $this->reports->add($report);
             $report->setTweet($this);
         }
+        return $this;
+    }
+    /** 
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setTweet($this);
+        }
+        return $this;
+    }
+    /**
+     * @return Collection<int, Retweet>
+     */
+    public function getRetweets(): Collection
+    {
+        return $this->retweets;
+    }
+
+    public function addRetweet(Retweet $retweet): static
+    {
+        if (!$this->retweets->contains($retweet)) {
+            $this->retweets->add($retweet);
+            $retweet->setTweet($this);
+        }
 
         return $this;
     }
@@ -107,6 +156,26 @@ class Tweet
             // set the owning side to null (unless already changed)
             if ($report->getTweet() === $this) {
                 $report->setTweet(null);
+            }
+        }
+        return $this;
+    }
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getTweet() === $this) {
+                $like->setTweet(null);
+            }
+        }
+        return $this;
+    }
+    public function removeRetweet(Retweet $retweet): static
+    {
+        if ($this->retweets->removeElement($retweet)) {
+            // set the owning side to null (unless already changed)
+            if ($retweet->getTweet() === $this) {
+                $retweet->setTweet(null);
             }
         }
 

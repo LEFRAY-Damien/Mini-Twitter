@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 @import "tailwindcss";
 
-
-
-=======
-@import "tailwindcss";
->>>>>>> feature/tweets
+body{
+    background-color: #15202B;
+}
