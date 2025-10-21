@@ -15,7 +15,7 @@
 	<body
 		class="bg-[#15202B] text-white min-h-screen">
 
-		<!-- 🔹 Bouton hamburger visible uniquement sur mobile -->
+		<!-- Bouton hamburger visible uniquement sur mobile -->
 		<button id="menuBtn" class="md:hidden fixed top-4 left-4 z-50 bg-neutral-800 p-2 rounded-lg">
 			<i class="fa-solid fa-bars text-white text-2xl"></i>
 		</button>
@@ -23,47 +23,10 @@
 		<div
 			class="flex">
 
-			<!-- 🔹 Sidebar responsive -->
-			<aside
-				id="sidebar" class="fixed top-0 left-0 h-screen w-56 bg-[#15202B] border-r border-neutral-800 flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 z-40">
+			{% include 'sidebar/sidebar.html.twig' %}
 
-				<!-- Partie haute -->
-				<div>
-					<div class="p-4 text-2xl font-bold text-center">
-						Mini Twitter
-					</div>
 
-					<nav class="p-4 space-y-3">
-						<a href="{{ path('app_tweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
-							<i class="fa-solid fa-house text-xl"></i>
-							Accueil
-						</a>
-						<a href="{{ path('app_retweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
-							<i class="fa-solid fa-retweet text-xl"></i>
-							Retweets
-						</a>
-						<a href="{{ path('app_profile') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
-							<i class="fa-solid fa-user text-xl"></i>
-							Profil
-						</a>
-						<a href="{{ path('app_admin') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
-							<i class="fa-solid fa-user text-xl"></i>
-							Admin
-						</a>
-					</nav>
-				</div>
-
-				<!-- Bouton déconnexion en bas -->
-				<div class="p-4">
-					<a href="{{ path('app_logout') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-600 transition">
-						<i class="fa-solid fa-right-from-bracket text-xl"></i>
-						Déconnexion
-					</a>
-				</div>
-
-			</aside>
-
-			<!-- 🔹 Contenu principal -->
+			<!-- Contenu principal -->
 			<main class="flex-1 p-6 flex justify-center md:ml-56">
 				<div class="max-w-4xl w-full space-y-6 rounded-2xl shadow-lg p-8 bg-[#15202B]"> {% block body %}{% endblock %}
 					</div>
@@ -71,7 +34,7 @@
 
 			</div>
 
-			<!-- 🔹 Script pour ouvrir/fermer le menu -->
+			<!-- Script pour ouvrir/fermer le menu -->
 			<script>
 				const menuBtn = document.getElementById('menuBtn');
 const sidebar = document.getElementById('sidebar');
