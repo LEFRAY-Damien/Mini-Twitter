@@ -75,19 +75,6 @@ final class TweetController extends AbstractController
         ]);
     }
 
-    // #[IsGranted('ROLE_ADMIN')]
-    // #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'])]
-    // public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
-    //         $entityManager->remove($tweet);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
-    // }
-
-    //supprimer tweet
     #[Route('/tweet/{id}/delete', name: 'app_tweet_delete')]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
