@@ -31,7 +31,7 @@ class TweetType extends AbstractType
                 ],
                 // 'constraints' => [
                 //     new Regex([
-                //         'pattern' => '/^[a-zA-Z0-9_]$/',
+                //         'pattern' => '/^[a-zA-Z0-9_]+$/',
                 //         'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores'
                 //     ])
                 // ]
