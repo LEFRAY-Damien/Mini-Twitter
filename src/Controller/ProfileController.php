@@ -67,6 +67,22 @@ final class ProfileController extends AbstractController
         ]);
     }
 
+
+    #[Route('/profile/tweets/{id}', name: 'app_profile_tweets')]
+    public function viewProfileTweets(User $user): Response
+    {
+        return $this->render('profile/profile_tweets.html.twig', [
+            'user' => $user,
+        ]);
+    }
+    #[Route('/profile/retweets/{id}', name: 'app_profile_retweets')]
+    public function viewProfileRetweets(User $user): Response
+    {
+        return $this->render('profile/profile_retweets.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
     #[Route('/profile/{id}', name: 'app_profile_view')]
     public function viewProfile(User $user): Response
     {
