@@ -1,0 +1,23 @@
+{{ form_start(form) }}
+  <div class="flex justify-center">
+    <div class="mb-3 w-1/2">
+      <div class="input-group relative flex flex-wrap items-stretch w-full mb-4">
+        {{ form_widget(form.q, {'attr': {'class': 'form-control relative flex-auto min-w-0
+        block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white
+        bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out
+        m-0 focus:bg-white focus:border-blue-600
+        focus:outline-none'}
+        }) }}
+        <button class="btn inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center" type="submit" id="button-addon">
+          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search"
+               class="w-4" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="currentColor"
+                  d="M505 442.7l-99.7-99.7C429 312.3 440 281.6 440 248 440 111 329 0 192 0S-56 111-56 248s111 248 248 248c33.6 0 64.3-11 95-34.7l99.7 99.7c4.5 4.5 10.6 7 17 7s12.5-2.5 17-7C514 467.7 514 451.7 505 442.7zM192 400c-83.8 0-152-68.2-152-152S108.2 96 192 96s152 68.2 152 152-68.2 152-152 152z">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+{{ form_end(form) }}
+

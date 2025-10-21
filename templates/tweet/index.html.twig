@@ -4,6 +4,9 @@
 
 
 {% block body %}
+
+{% include 'components/_search_data.html.twig' %}
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
 
@@ -21,7 +24,8 @@
             Écrire un tweet
         </a>
 
-        {% if tweets is not empty %}
+        {# {% if tweets is not empty %} #}
+        {% if tweets|length %}
         <div>
 
             {% for tweet in tweets %}

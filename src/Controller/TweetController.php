@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Form\TweetType;
+use App\Model\SearchData;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Form\SearchType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,10 +19,21 @@ final class TweetController extends AbstractController
 {
     #[IsGranted('ROLE_USER')]
     #[Route(name: 'app_tweet_index', methods: ['GET'])]
-    public function index(TweetRepository $tweetRepository): Response
-    {   
+    public function index(Request $request, TweetRepository $tweetRepository): Response
+    {
+        $searchData = new SearchData();
+        $form = $this->createForm(SearchType::class, $searchData);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $tweets = $tweetRepository->findBySearch($searchData);
+        } else {
+            $tweets = $tweetRepository->findAll();
+        }
+
         return $this->render('tweet/index.html.twig', [
-            'tweets' => $tweetRepository->findAll(),
+            'form' => $form->createView(),
+            'tweets' => $tweets,
         ]);
     }
 
@@ -65,18 +78,5 @@ final class TweetController extends AbstractController
 
         return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
     }
-
-    //    #[Route('/listTweets/{id}', name: 'app_tweet_show')]
-    //     public function showTweet(int $id, TweetRepository $tweetRepository  ) : Response
-    //     {
-    //         $tweetShow = $tweetRepository->find($id);
-    //         if (!$tweet) {
-    //             throw $this->createNotFoundException('Tweet Non Trouvé');
-    //         }
-
-    //         return $this->render('tweet/index.html.twig', [
-    //             'tweet' => $tweet
-    //         ])
-    //     }
     
 }
