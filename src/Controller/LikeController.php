@@ -11,7 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/like')]
 final class LikeController extends AbstractController
 {
@@ -23,7 +25,7 @@ final class LikeController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{id}', name: 'app_like_new', methods: ['GET', 'POST'])]
+    #[Route('/new/{id}', name: 'app_like_new', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function new(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
     {
         $repository = $entityManager->getRepository(Like::class);
@@ -43,7 +45,7 @@ final class LikeController extends AbstractController
         return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/{id}', name: 'app_like_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_like_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Like $like): Response
     {
         return $this->render('like/show.html.twig', [
@@ -51,7 +53,7 @@ final class LikeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_like_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_like_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Like $like, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(LikeType::class, $like);
@@ -69,7 +71,7 @@ final class LikeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_like_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_like_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Like $like, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$like->getId(), $request->getPayload()->getString('_token'))) {

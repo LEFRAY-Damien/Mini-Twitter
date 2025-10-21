@@ -42,7 +42,7 @@ final class AdminController extends AbstractController
         ]);
     }
     //supprimer report
-    #[Route(('/report/{id}/delete'),name: 'app_admin_delete_report', methods: ['POST'])]
+    #[Route(('/report/{id}/delete'),name: 'app_admin_delete_report', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function deleteReport(Report $report, EntityManagerInterface $em): Response
     {
         $em->remove($report);
@@ -54,7 +54,7 @@ final class AdminController extends AbstractController
     }
     
     //supprimer tweet
-    #[Route(('/tweet/{id}/delete'), name: 'app_admin_delete_tweet')]
+    #[Route(('/tweet/{id}/delete'), name: 'app_admin_delete_tweet', requirements: ['id' => '\d+'])]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
         foreach ($tweet->getReports() as $report) {
@@ -70,7 +70,7 @@ final class AdminController extends AbstractController
           
     }
     // Suspendre/Bannir un utilisateur (isBanned)
-        #[Route('/user/{id}/ban', name: 'app_admin_ban_user')]
+        #[Route('/user/{id}/ban', name: 'app_admin_ban_user', requirements: ['id' => '\d+'])]
         public function banUser(User $user, EntityManagerInterface $em) : Response
         {
             $user->setIsBanned(true);
@@ -83,7 +83,7 @@ final class AdminController extends AbstractController
         }
     
     // Désactivé un compte utilisateurs (isActive)
-    #[Route('/user/{id}/disable', name: 'app_admin_disable_user')]
+    #[Route('/user/{id}/disable', name: 'app_admin_disable_user', requirements: ['id' => '\d+'])]
     public function disableUser(User $user, EntityManagerInterface $em) : Response
     {
         $user->setIsActive(false);

@@ -14,11 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_ADMIN')]
 #[Route('/report')]
 final class ReportController extends AbstractController
-{
-    #[Route('/tweet/{id}/report', name: 'app_report_form',  methods: ['GET', 'POST'])]
+{   
+    #[IsGranted('ROLE_USER')]
+    #[Route('/tweet/{id}/report', name: 'app_report_form',  methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function makeReport(Request $request, Tweet $tweet, EntityManagerInterface $em) : Response
     {
         $user = $this->getUser();
@@ -58,6 +58,7 @@ final class ReportController extends AbstractController
         
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/listTweets', name: 'app_tweet_report')]
     
         public function listTweets(ReportRepository $reportRepository) : Response 

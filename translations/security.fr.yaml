@@ -1,0 +1,6 @@
+Invalid credentials.: "Identifiants incorrects."
+Invalid CSRF token.: "Jeton CSRF invalide."
+Account is disabled.: "Votre compte est désactivé."
+Account is locked.: "Votre compte est verrouillé."
+Account is banned.: "Votre compte a été banni."
+Too many failed login attempts, please try again later.: "Trop de tentatives échouées. Réessayez plus tard."

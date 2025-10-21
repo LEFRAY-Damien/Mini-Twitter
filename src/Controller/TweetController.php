@@ -46,7 +46,7 @@ final class TweetController extends AbstractController
         ]);
     }
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Tweet $tweet): Response
     {
         return $this->render('tweet/show.html.twig', [
@@ -55,7 +55,7 @@ final class TweetController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {

@@ -11,7 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 #[Route('/retweet')]
 final class RetweetController extends AbstractController
 {
@@ -23,7 +25,7 @@ final class RetweetController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_retweet_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_retweet_new', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $retweet = new Retweet();
@@ -51,7 +53,7 @@ final class RetweetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_retweet_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_retweet_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Retweet $retweet, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RetweetType::class, $retweet);
@@ -69,7 +71,7 @@ final class RetweetController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_retweet_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_retweet_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Retweet $retweet, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $retweet->getId(), $request->getPayload()->getString('_token'))) {
@@ -80,7 +82,7 @@ final class RetweetController extends AbstractController
         return $this->redirectToRoute('app_retweet_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/add/{id}', name: 'app_retweet_add', methods: ['GET'])]
+    #[Route('/add/{id}', name: 'app_retweet_add', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function retweet(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
     {
         $repository = $entityManager->getRepository(Retweet::class);
