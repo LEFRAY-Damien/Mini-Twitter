@@ -29,6 +29,7 @@ class RegistrationController extends AbstractController
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $user->setIsActive(true);
+            $user->setIsBanned(false);
             $entityManager->persist($user);
             $entityManager->flush();
 
