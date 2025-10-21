@@ -29,12 +29,12 @@ class TweetType extends AbstractType
                     'cols' => 60,
                     'class' => 'text-neutral-400 border-1 border-neutral-600 rounded-lg p-3'
                 ],
-                'constraints' => [
-                    new Regex([
-                        'pattern' => '/^[a-zA-Z0-9_]$/',
-                        'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores'
-                    ])
-                ]
+                // 'constraints' => [
+                //     new Regex([
+                //         'pattern' => '/^[a-zA-Z0-9_]$/',
+                //         'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores'
+                //     ])
+                // ]
             ])
             ->add('media', FileType::class, [
                 'label' => 'Média (image)',
