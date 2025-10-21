@@ -5,6 +5,7 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/uploads/avatars/
+/public/uploads/media/
 /migrations/
 /var/
 /vendor/

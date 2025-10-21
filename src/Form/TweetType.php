@@ -6,11 +6,13 @@ use App\Entity\Tweet;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\File;
 
 class TweetType extends AbstractType
 {
@@ -34,6 +36,25 @@ class TweetType extends AbstractType
                     ])
                 ]
             ])
+            ->add('media', FileType::class, [
+                'label' => 'Média (image)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '2M',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                        ],
+                        'mimeTypesMessage' => 'Merci de choisir une image valide (jpeg, png, gif)',
+                    ])
+                ],
+                'attr' => [
+                    'class' => 'text-white'
+                ]
+            ]);
         ;
     }
 

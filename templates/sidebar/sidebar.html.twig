@@ -1,0 +1,45 @@
+<!-- 🔹 Sidebar responsive -->
+<aside
+	id="sidebar" class="fixed top-0 left-0 h-screen w-56 bg-[#15202B] border-r border-neutral-800 flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 z-40">
+
+	<!-- Partie haute -->
+	<div>
+		<div class="p-4 text-2xl font-bold text-center">
+			Mini Twitter
+		</div>
+
+		<nav class="p-4 space-y-3">
+			<a href="{{ path('app_tweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+				<i class="fa-solid fa-house text-xl"></i>
+				Tweets
+			</a>
+			<a href="{{ path('app_retweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+				<i class="fa-solid fa-retweet text-xl"></i>
+				Retweets
+			</a>
+			<a href="{{ path('app_profile') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+				<i class="fa-solid fa-user text-xl"></i>
+				Profil
+			</a>
+
+			{% if is_granted('ROLE_ADMIN') %}
+
+				<a href="{{ path('app_admin') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+					<i class="fa-solid fa-user-tie text-xl"></i>
+					Admin
+				</a>
+
+			{% endif %}
+
+		</nav>
+	</div>
+
+	<!-- Bouton déconnexion en bas -->
+	<div class="p-4">
+		<a href="{{ path('app_logout') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-600 transition">
+			<i class="fa-solid fa-right-from-bracket text-xl"></i>
+			Déconnexion
+		</a>
+	</div>
+
+</aside>

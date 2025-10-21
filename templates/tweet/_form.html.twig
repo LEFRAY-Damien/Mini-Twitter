@@ -1,4 +1,10 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="bg-[#1DA1F2] text-white p-3 rounded-lg btn ">{{ button_label|default('Envoyer') }}</button>
+<div>
+	{{ form_widget(form.content) }}
+</div>
+<div class="my-3">
+	{{ form_label(form.media, null, {'label_attr' : {'class': 'text-white'}}) }}
+	{{ form_widget(form.media) }} 
+</div>
+<button class="bg-[#1DA1F2] text-white p-3 rounded-lg btn ">{{ button_label|default('Envoyer') }}</button>
 {{ form_end(form) }}
