@@ -30,6 +30,9 @@ class LikeType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Like::class,
+            'crsf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'tweet_item',
         ]);
     }
 }

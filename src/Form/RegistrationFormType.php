@@ -51,6 +51,9 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'crsf_protection' => true,
+            'csrf_field_name' => '_token',
+            'csrf_token_id'   => 'tweet_item',
         ]);
     }
 }
