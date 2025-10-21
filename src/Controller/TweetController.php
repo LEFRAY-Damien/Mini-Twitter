@@ -75,17 +75,43 @@ final class TweetController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'])]
-    public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    // #[IsGranted('ROLE_ADMIN')]
+    // #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'])]
+    // public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
+    //         $entityManager->remove($tweet);
+    //         $entityManager->flush();
+    //     }
+
+    //     return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
+    // }
+
+    //supprimer tweet
+    #[Route('/tweet/{id}/delete', name: 'app_tweet_delete')]
+    public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($tweet);
-            $entityManager->flush();
+        
+        foreach ($tweet->getReports() as $report) {
+            $em->remove($report);
+        }
+        
+        foreach ($tweet->getRetweets() as $retweet) {
+            $em->remove($retweet);
         }
 
-        return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
+        foreach ($tweet->getLikes() as $like) {
+        $em->remove($like);
+        
     }
+        $em->remove($tweet);
+        $em->flush();
+
+        $this->addFlash('success', 'Tweet et retweets supprimés !');
+
+        return $this->redirectToRoute('app_tweet_index');
+    }
+
 
     //    #[Route('/listTweets/{id}', name: 'app_tweet_show')]
     //     public function showTweet(int $id, TweetRepository $tweetRepository  ) : Response
