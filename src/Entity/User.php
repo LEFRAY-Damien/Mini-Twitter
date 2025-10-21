@@ -63,7 +63,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Report::class, mappedBy: 'reported')]
     private Collection $reports;
 
-    #[ORM\Column]
+    #[ORM\Column(type: "boolean", nullable: true)]
     private ?bool $isBanned = null;
 
     #[ORM\Column]
