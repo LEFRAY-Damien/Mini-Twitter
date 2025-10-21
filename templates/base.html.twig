@@ -1,35 +1,86 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>{% block title %}Mini Twitter{% endblock %}</title>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Mini Twitter
+			{% endblock %}
+		</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css" />
-</head>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+		<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css"/>
+	</head>
 
-<body class="bg-[#15202B] text-white min-h-screen">
+	<body
+		class="bg-[#15202B] text-white min-h-screen">
 
-  <div class="flex flex-col md:flex-row min-h-screen">
+		<!-- 🔹 Bouton hamburger visible uniquement sur mobile -->
+		<button id="menuBtn" class="md:hidden fixed top-4 left-4 z-50 bg-neutral-800 p-2 rounded-lg">
+			<i class="fa-solid fa-bars text-white text-2xl"></i>
+		</button>
 
-    <!-- Navbar verticale -->
-    <div class="md:w-56 flex-shrink-0 h-screen fixed">
-      {% include 'sidebar/sidebar.html.twig' %}
-    </div>
+		<div
+			class="flex">
 
-    <!-- Contenu principal -->
-    <main class="flex-1 flex justify-center p-6">
-      <div class="max-w-4xl w-full space-y-6 rounded-2xl shadow-lg p-8 bg-[#15202B]">
+			<!-- 🔹 Sidebar responsive -->
+			<aside
+				id="sidebar" class="fixed top-0 left-0 h-screen w-56 bg-[#15202B] border-r border-neutral-800 flex flex-col justify-between transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out shrink-0 z-40">
 
-        {% block body %}
-     
-        {% endblock %}
+				<!-- Partie haute -->
+				<div>
+					<div class="p-4 text-2xl font-bold border-b border-neutral-700 text-center">
+						Mini Twitter
+					</div>
 
-      </div>
-    </main>
+					<nav class="p-4 space-y-3">
+						<a href="{{ path('app_tweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+							<i class="fa-solid fa-house text-xl"></i>
+							Accueil
+						</a>
+						<a href="{{ path('app_retweet_index') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+							<i class="fa-solid fa-retweet text-xl"></i>
+							Retweets
+						</a>
+						<a href="{{ path('app_profile') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+							<i class="fa-solid fa-user text-xl"></i>
+							Profil
+						</a>
+						<a href="{{ path('app_admin') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+							<i class="fa-solid fa-user text-xl"></i>
+							Admin
+						</a>
+					</nav>
+				</div>
 
-  </div>
+				<!-- Bouton déconnexion en bas -->
+				<div class="p-4 border-t border-neutral-700">
+					<a href="{{ path('app_logout') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-red-600 transition">
+						<i class="fa-solid fa-right-from-bracket text-xl"></i>
+						Déconnexion
+					</a>
+				</div>
 
-</body>
-</html>
+			</aside>
+
+			<!-- 🔹 Contenu principal -->
+			<main class="flex-1 p-6 flex justify-center md:ml-56">
+				<div class="max-w-4xl w-full space-y-6 rounded-2xl shadow-lg p-8 bg-[#15202B]"> {% block body %}{% endblock %}
+					</div>
+				</main>
+
+			</div>
+
+			<!-- 🔹 Script pour ouvrir/fermer le menu -->
+			<script>
+				const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+menuBtn.addEventListener('click', () => {
+sidebar.classList.toggle('-translate-x-full');
+});
+			</script>
+
+		</body>
+
+
+	</html>
