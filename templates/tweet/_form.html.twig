@@ -1,10 +1,16 @@
 {{ form_start(form) }}
 <div>
 	{{ form_widget(form.content) }}
+	<div class="text-red-400 text-sm mt-1">
+            {{ form_errors(form.content) }}
+    </div>
 </div>
 <div class="my-3">
 	{{ form_label(form.media, null, {'label_attr' : {'class': 'text-white'}}) }}
-	{{ form_widget(form.media) }} 
+	{{ form_widget(form.media) }}
+	<div class="text-red-400 text-sm mt-1">
+		{{ form_errors(form.media) }}
+	</div>
 </div>
 <button class="bg-[#1DA1F2] text-white p-3 rounded-lg btn ">{{ button_label|default('Envoyer') }}</button>
 {{ form_end(form) }}

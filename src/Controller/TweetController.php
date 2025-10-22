@@ -63,7 +63,7 @@ final class TweetController extends AbstractController
 
         return $this->render('tweet/new.html.twig', [
             'tweet' => $tweet,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
     #[IsGranted('ROLE_USER')]

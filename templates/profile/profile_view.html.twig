@@ -8,11 +8,11 @@
 
   <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
 
-    <div class="h-40 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
+    <div class="h-40 bg-gradient-to-r from-[#15202B] to-[#1DA1F2] relative">
       <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
         <img src="{{ asset(user.avatar ? 'uploads/avatars/' ~ user.avatar : 'images/default-avatar.png') }}" 
              alt="Avatar"
-             class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover">
+             class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover bg-white">
       </div>
     </div>
 
@@ -24,7 +24,7 @@
       {% if app.user and app.user.id == user.id %}
         <div class="mt-6 flex justify-center">
           <a href="{{ path('app_profile_edit') }}"
-             class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow transition">
+             class="py-2 px-8 bg-[#1DA1F2] text-white font-bold rounded-full shadow hover:bg-[#0d95e8] focus:outline-none focus:ring-2 focus:ring-[#1DA1F2] focus:ring-offset-2 transition-colors">
              Modifier
           </a>
         </div>

@@ -32,7 +32,7 @@ class TweetType extends AbstractType
                 'constraints' => [
                     new Regex([
                         'pattern' => '/^[\p{L}\p{N}\s_\-.,!?()\'"]+$/u',
-                        'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores'
+                        'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores.'
                     ])
                 ]
             ])
