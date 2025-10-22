@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints as Assert;
+use Webmozart\Assert\Assert as AssertAssert;
 
 class UserType extends AbstractType
 {
@@ -20,10 +22,33 @@ class UserType extends AbstractType
             ->add('username', TextType::class, [
                 'label' => 'Nom d’utilisateur',
                 'attr' => ['placeholder' => 'Nom d’utilisateur'],
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'Le nom ne doit pas être vide.'
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[\p{L}\p{N}\s_\-.,!?()\"]+$/u',
+                        'message' => 'Le nom est invalide.'
+                    ]),
+                    new Assert\Length(
+                        min: 3,
+                        max: 50,
+                        minMessage: "Le nom doit contenir au moins 3 caractères.",
+                        maxMessage: "Le nom ne peut pas dépasser 50 caractères."
+                    )
+                ]
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => ['placeholder' => 'Email'],
+                'constraints' => [
+                    new Assert\NotBlank([
+                        'message' => 'L\'email ne doit pas être vide.'
+                    ]),
+                    new Assert\Email([
+                        'message' => 'L\'email est invalide.'
+                    ])
+                ]
             ])
             ->add('avatar', FileType::class, [
                 'label' => 'Avatar (image)',

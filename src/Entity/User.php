@@ -40,8 +40,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\Regex(
-    pattern: "/^[a-zA-Z0-9_]+$/",
-    message: "Le nom d'utilisateur ne peut contenir que des lettres, chiffres ou underscores."
+    pattern: "/^[\p{L}\p{N}\s_\-.,!?()\"]+$/u",
+    message: "Le nom d'utilisateur est invalide."
     )]
     #[Assert\Length(
     min: 3,
