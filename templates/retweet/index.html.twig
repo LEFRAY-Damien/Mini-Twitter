@@ -1,33 +1,95 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Retweet index{% endblock %}
+{% block title %}Retweets{% endblock %}
 
 {% block body %}
-    <h1>Retweet index</h1>
+<div class="w-full flex flex-col items-center min-h-screen bg-[#15202B] text-white p-6">
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <h1 class="text-3xl font-extrabold mb-6">Retweets</h1>
+
+    <div class="w-full max-w-2xl space-y-4">
+        {% if retweets is not empty %}
         {% for retweet in retweets %}
-            <tr>
-                <td>{{ retweet.id }}</td>
-                <td>
-                    <a href="{{ path('app_retweet_show', {'id': retweet.id}) }}">show</a>
-                    <a href="{{ path('app_retweet_edit', {'id': retweet.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="2">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="p-4 bg-[#192734] rounded-2xl shadow hover:bg-[#1c2732] transition">
+            <div class="flex justify-between items-start">
+                <div class="flex items-center space-x-3">
+                    <img src="{{ asset(retweet.user.avatar ? 'uploads/avatars/' ~ retweet.user.avatar : 'images/default-avatar.png') }}"
+                        alt="{{ retweet.user.username }}"
+                        class="w-10 h-10 rounded-full border-2 border-[#1DA1F2] object-cover">
+                    <div>
+                        <a href="{{ path('app_profile_view', {'id': retweet.user.id}) }}"
+                            class="font-bold hover:text-[#1DA1F2] transition">
+                            {{ retweet.user.username }}
+                        </a>
+                        <p class="text-gray-400 text-sm">{{ retweet.createdAt ? retweet.createdAt|date('d/m/Y H:i') : ''
+                            }}</p>
+                    </div>
+                </div>
+            </div>
 
-    <a href="{{ path('app_retweet_new') }}">Create new</a>
+            <div class="pt-3 pl-13">
+                <p class="text-gray-200 mb-2">{{ retweet.tweet.content }}</p>
+                {% if retweet.tweet.media %}
+                <img src="{{ asset('uploads/media/' ~ retweet.tweet.media) }}" class="rounded-md mt-2">
+                {% endif %}
+            </div>
+
+            <div class="flex items-center mt-3 space-x-3 pl-13">
+                <a href="{{ path('app_like_new', {'id': retweet.tweet.id}) }}"
+                    class="text-gray-400 hover:text-red-500 transition">
+                    <i class="fa-solid fa-heart
+                               {% for like in retweet.tweet.likes %}
+                                   {% if app.user and like.user.id == app.user.id %}
+                                       text-red-500
+                                   {% endif %}
+                               {% endfor %}"></i>
+                    <span class="text-white ml-1">{{ retweet.tweet.likes.count }}</span>
+                </a>
+
+                {% set userRetweet = null %}
+                {% for r in retweet.tweet.retweets %}
+                {% if app.user and r.user.id == app.user.id %}
+                {% set userRetweet = r %}
+                {% endif %}
+                {% endfor %}
+
+                {% if userRetweet %}
+                <form action="{{ path('app_retweet_delete', {'id': userRetweet.id}) }}" method="post"
+                    onsubmit="return confirm('Voulez-vous retirer ce retweet ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ userRetweet.id) }}">
+                    <button type="submit" class="text-gray-400 hover:text-red-500 transition flex items-center">
+                        <i class="icon-repeat-2"></i>
+                        <span class="text-white ml-1">{{ retweet.tweet.retweets.count }}</span>
+                    </button>
+                </form>
+                {% else %}
+                <a href="{{ path('app_retweet_add', {'id': retweet.tweet.id}) }}"
+                    class="text-gray-400 hover:text-[#1DA1F2] transition flex items-center">
+                    <i class="icon-repeat-2"></i>
+                    <span class="text-white ml-1">{{ retweet.tweet.retweets.count }}</span>
+                </a>
+                {% endif %}
+
+                {% if app.user and app.user.id != retweet.user.id %}
+                {% if app.user.isFollowing(retweet.user) %}
+                <a href="{{ path('app_follow_toggle', {'id': retweet.user.id}) }}"
+                    class="bg-gray-600 hover:bg-gray-500 text-white px-3 py-1 rounded-lg text-sm transition">
+                    Ne plus suivre
+                </a>
+                {% else %}
+                <a href="{{ path('app_follow_toggle', {'id': retweet.user.id}) }}"
+                    class="bg-[#1DA1F2] hover:bg-blue-500 text-white px-3 py-1 rounded-lg text-sm transition">
+                    Suivre
+                </a>
+                {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="text-gray-400 text-center">Aucun retweet pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
