@@ -59,6 +59,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->retweets = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->followed = new ArrayCollection();
+        $this->replies = new ArrayCollection();
     }
 
     #[ORM\Column]
@@ -102,6 +103,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'followed')]
     private Collection $followed;
+
+    /**
+     * @var Collection<int, Replies>
+     */
+    #[ORM\OneToMany(targetEntity: Replies::class, mappedBy: 'user')]
+    private Collection $replies;
 
     public function getId(): ?int
     {
@@ -400,4 +407,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
         return false;
     }
+
+      /**
+       * @return Collection<int, Replies>
+       */
+      public function getReplies(): Collection
+      {
+          return $this->replies;
+      }
+
+      public function addReply(Replies $reply): static
+      {
+          if (!$this->replies->contains($reply)) {
+              $this->replies->add($reply);
+              $reply->setUser($this);
+          }
+
+          return $this;
+      }
+
+      public function removeReply(Replies $reply): static
+      {
+          if ($this->replies->removeElement($reply)) {
+              // set the owning side to null (unless already changed)
+              if ($reply->getUser() === $this) {
+                  $reply->setUser(null);
+              }
+          }
+
+          return $this;
+      }
 }

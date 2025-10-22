@@ -43,6 +43,7 @@ class Tweet
         $this->reports = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->retweets = new ArrayCollection();
+        $this->replies = new ArrayCollection();
     }
     /**
      *  @var Collection<int, Like>
@@ -59,6 +60,12 @@ class Tweet
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $media = null;
+
+    /**
+     * @var Collection<int, Replies>
+     */
+    #[ORM\OneToMany(targetEntity: Replies::class, mappedBy: 'tweet')]
+    private Collection $replies;
 
 
 
@@ -193,6 +200,36 @@ class Tweet
     public function setMedia(?string $media): static
     {
         $this->media = $media;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Replies>
+     */
+    public function getReplies(): Collection
+    {
+        return $this->replies;
+    }
+
+    public function addReply(Replies $reply): static
+    {
+        if (!$this->replies->contains($reply)) {
+            $this->replies->add($reply);
+            $reply->setTweet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReply(Replies $reply): static
+    {
+        if ($this->replies->removeElement($reply)) {
+            // set the owning side to null (unless already changed)
+            if ($reply->getTweet() === $this) {
+                $reply->setTweet(null);
+            }
+        }
 
         return $this;
     }

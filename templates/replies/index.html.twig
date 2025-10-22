@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Replies index{% endblock %}
+
+{% block body %}
+    <h1>Replies index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Content</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reply in replies %}
+            <tr>
+                <td>{{ reply.id }}</td>
+                <td>{{ reply.content }}</td>
+                <td>{{ reply.createdAt ? reply.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_replies_show', {'id': reply.id}) }}">show</a>
+                    <a href="{{ path('app_replies_edit', {'id': reply.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_replies_new') }}">Create new</a>
+{% endblock %}
