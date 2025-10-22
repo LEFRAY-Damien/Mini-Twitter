@@ -4,31 +4,53 @@
 {% endblock %}
 
 {% block body %}
-	<div class="min-h-screen bg-[#15202B] py-4">
+	<div class="min-h-screen bg-[#15202B] py-2">
+  <div class="max-w-3xl mx-auto bg-[#192734] rounded-2xl shadow-lg overflow-hidden text-white">
 
-		<div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="h-40 bg-gradient-to-r from-[#1DA1F2] to-blue-700 relative">
+      <div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
+        <img src="{{ asset(user.avatar ? 'uploads/avatars/' ~ user.avatar : 'images/default-avatar.png') }}"
+          alt="Avatar" class="w-24 h-24 rounded-full border-4 border-[#192734] shadow-md object-cover">
+      </div>
+    </div>
 
-			<div class="h-40 bg-gradient-to-r from-blue-500 to-indigo-600 relative">
-				<div class="absolute -bottom-12 left-1/2 transform -translate-x-1/2">
-					<img src="{{ asset(user.avatar ? 'uploads/avatars/' ~ user.avatar : 'images/default-avatar.png') }}" alt="Avatar" class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover">
-				</div>
-			</div>
+    <div class="mt-16 px-8 pb-10 text-center">
+      <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+      <p class="text-gray-400">{{ user.email }}</p>
 
-			<div class="mt-16 px-8 pb-10 text-center">
-				<h1 class="text-2xl font-bold text-gray-800">{{ user.username }}</h1>
-				<p class="text-gray-500">{{ user.email }}</p>
+      <div class="mt-6 flex justify-center space-x-6">
+        {% if app.user %}
+        {% if app.user.id == user.id %}
+        <a href="{{ path('app_profile_edit') }}"
+          class="bg-[#1DA1F2] hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow transition">
+          Modifier le profil
+        </a>
+        {% else %}
+        {% if app.user.isFollowing(user) %}
+        <a href="{{ path('app_follow_toggle', {'id': user.id}) }}"
+          class="bg-gray-600 hover:bg-gray-500 text-white px-4 py-2 rounded-lg shadow transition">
+          Ne plus suivre
+        </a>
+        {% else %}
+        <a href="{{ path('app_follow_toggle', {'id': user.id}) }}"
+          class="bg-[#1DA1F2] hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow transition">
+          Suivre
+        </a>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+      </div>
 
-
-				{% if app.user and app.user.id == user.id %}
-					<div class="mt-6 flex justify-center">
-						<a href="{{ path('app_profile_edit') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow transition">
-							Modifier
-						</a>
-					</div>
-				{% endif %}
-
-			</div>
-		</div>
+      <div class="mt-8 flex justify-center space-x-8 text-gray-400">
+        <a href="{{ path('app_profile_followers', {'id': user.id}) }}" class="hover:text-[#1DA1F2] transition">
+          <span class="font-bold text-white">{{ user.followed|length }}</span> Abonnées
+        </a>
+        <a href="{{ path('app_profile_following', {'id': user.id}) }}" class="hover:text-[#1DA1F2] transition">
+          <span class="font-bold text-white">{{ user.following|length }}</span> Suivis
+        </a>
+      </div>
+    </div>
+  </div>
 
 		<div class="w-1/3 m-auto mt-3">
 			<ul class="hidden text-sm font-medium text-center text-gray-500 rounded-lg shadow-sm sm:flex dark:divide-gray-700 dark:text-gray-400">
