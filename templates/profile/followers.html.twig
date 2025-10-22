@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Followers de {{ user.username }}{% endblock %}
+
+{% block body %}
+
+<div class="min-h-screen bg-[#15202B] py-10 text-white">
+    <div class="max-w-3xl mx-auto bg-[#192734] rounded-2xl shadow-lg px-8 pb-10">
+        <h1 class="text-2xl font-bold text-center mt-6 mb-8 text-white">
+            Followers de {{ user.username }}
+        </h1>
+
+        {% if followers is not empty %}
+        <ul class="space-y-4">
+            {% for follow in followers %}
+            {% set follower = follow.follower %}
+            <li
+                class="flex items-center space-x-4 bg-[#15202B] p-4 rounded-xl shadow-sm hover:bg-[#1DA1F2]/10 transition">
+                <img src="{{ asset(follower.avatar ? 'uploads/avatars/' ~ follower.avatar : 'images/default-avatar.png') }}"
+                    alt="{{ follower.username }}" class="w-12 h-12 rounded-full object-cover border-2 border-[#1DA1F2]">
+                <div class="flex-1">
+                    <a href="{{ path('app_profile_view', {'id': follower.id}) }}"
+                        class="font-semibold hover:text-[#1DA1F2] transition">
+                        {{ follower.username }}
+                    </a>
+                    <p class="text-gray-400 text-sm">{{ follower.email }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="text-center text-gray-400 mt-8">Aucun follower pour le moment.</p>
+        {% endif %}
+
+        <div class="mt-8 text-center">
+            <a href="{{ path('app_profile_view', {'id': user.id}) }}" class="text-[#1DA1F2] hover:underline">
+                ← Retour au profil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

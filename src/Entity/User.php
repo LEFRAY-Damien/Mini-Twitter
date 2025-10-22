@@ -57,6 +57,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tweets = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->retweets = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->followed = new ArrayCollection();
     }
 
     #[ORM\Column]
@@ -88,6 +90,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Retweet::class, mappedBy: 'user')]
     private Collection $retweets;
+
+    /**
+     * @var Collection<int, Follow>
+     */
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'follower')]
+    private Collection $following;
+
+    /**
+     * @var Collection<int, Follow>
+     */
+    #[ORM\OneToMany(targetEntity: Follow::class, mappedBy: 'followed')]
+    private Collection $followed;
 
     public function getId(): ?int
     {
@@ -316,5 +330,74 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isActive = $isActive;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Follow>
+     */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    public function addFollowing(Follow $following): static
+    {
+        if (!$this->following->contains($following)) {
+            $this->following->add($following);
+            $following->setFollower($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowing(Follow $following): static
+    {
+        if ($this->following->removeElement($following)) {
+            // set the owning side to null (unless already changed)
+            if ($following->getFollower() === $this) {
+                $following->setFollower(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Follow>
+     */
+    public function getFollowed(): Collection
+    {
+        return $this->followed;
+    }
+
+    public function addFollowed(Follow $followed): static
+    {
+        if (!$this->followed->contains($followed)) {
+            $this->followed->add($followed);
+            $followed->setFollowed($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollowed(Follow $followed): static
+    {
+        if ($this->followed->removeElement($followed)) {
+            // set the owning side to null (unless already changed)
+            if ($followed->getFollowed() === $this) {
+                $followed->setFollowed(null);
+            }
+        }
+
+        return $this;
+    }
+      public function isFollowing(User $user): bool
+    {
+        foreach ($this->following as $follow) {
+            if ($follow->getFollowed() === $user) {
+                return true;
+            }
+        }
+        return false;
     }
 }
