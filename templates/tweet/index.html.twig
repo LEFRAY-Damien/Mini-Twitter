@@ -71,6 +71,10 @@
 
 			<div class="flex flex-row items-center justify-between mt-3">
 				<div class="flex space-x-3">
+					<a href="{{ path('app_replies_new', {'id': tweet.id})}}" class="flex items-center">
+						<i class="icon-message-square-reply"></i>
+						<span class="text-white ml-2">{{ tweet.replies.count }}</span> 
+					</a>
 					<a href="{{ path('app_like_new', {'id': tweet.id}) }}"
 						class="text-gray-400 hover:text-red-500 transition-colors duration-300">
 						<i class="fa-solid fa-heart fa-xs

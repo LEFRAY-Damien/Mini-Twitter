@@ -1,4 +1,6 @@
 {{ form_start(form) }}
+    <div>
     {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <button class="btn bg-[#1DA1F2] rounded-full px-5 py-2 w-fit">{{ button_label|default('Répondre') }}</button>
+    </div>
 {{ form_end(form) }}

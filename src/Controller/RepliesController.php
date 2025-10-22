@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Replies;
+use App\Entity\Tweet;
 use App\Form\RepliesType;
 use App\Repository\RepliesRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,10 +23,12 @@ final class RepliesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_replies_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new/{id}', name: 'app_replies_new', methods: ['GET', 'POST'])]
+    public function new(Tweet $tweet,Request $request, EntityManagerInterface $entityManager): Response
     {
         $reply = new Replies();
+        $reply->setUser($this->getUser());
+        $reply->setTweet($tweet);
         $form = $this->createForm(RepliesType::class, $reply);
         $form->handleRequest($request);
 
@@ -33,12 +36,13 @@ final class RepliesController extends AbstractController
             $entityManager->persist($reply);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_replies_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('replies/new.html.twig', [
             'reply' => $reply,
             'form' => $form,
+            'tweet' => $tweet,
         ]);
     }
 
