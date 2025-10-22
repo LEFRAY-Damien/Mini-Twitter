@@ -20,7 +20,7 @@ final class TweetController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route(name: 'app_tweet_index', methods: ['GET'])]
     public function index(TweetRepository $tweetRepository): Response
-    {   
+    {
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAll(),
         ]);
@@ -66,6 +66,7 @@ final class TweetController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'])]
     public function show(Tweet $tweet): Response
@@ -75,22 +76,31 @@ final class TweetController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/tweet/{id}/delete', name: 'app_tweet_delete')]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
-        
+
+        // SUPPRESSION DU FICHIER IMAGE ASSOCIÉ AU TWEET
+        $mediaFilename = $tweet->getMedia();
+        if ($mediaFilename) {
+            $mediaPath = $this->getParameter('media_directory') . '/' . $mediaFilename;
+            if (file_exists($mediaPath)) {
+                unlink($mediaPath); 
+            }
+        }
+
         foreach ($tweet->getReports() as $report) {
             $em->remove($report);
         }
-        
+
         foreach ($tweet->getRetweets() as $retweet) {
             $em->remove($retweet);
         }
 
         foreach ($tweet->getLikes() as $like) {
-        $em->remove($like);
-        
-    }
+            $em->remove($like);
+        }
         $em->remove($tweet);
         $em->flush();
 
@@ -112,5 +122,5 @@ final class TweetController extends AbstractController
     //             'tweet' => $tweet
     //         ])
     //     }
-    
+
 }

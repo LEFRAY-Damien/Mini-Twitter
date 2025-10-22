@@ -86,7 +86,8 @@
                             </div>
 
                             {# MODIFICATION : Le bouton de suppression n'est visible que par l'auteur du tweet #}
-                            {% if app.user == tweet.user %}
+                            {# {% if app.user == tweet.user %} #}
+                            {% if app.user == tweet.user or is_granted('ROLE_ADMIN') %}
                             <form method="POST" 
                                     action="{{ path('app_tweet_delete', {'id': tweet.id}) }}" 
                                     onsubmit="return confirm('Voulez-vous supprimer ce tweet ?');" 
