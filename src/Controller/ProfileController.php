@@ -75,23 +75,21 @@ final class ProfileController extends AbstractController
         ]);
     }
 
-    // #[Route('/profile', name: 'app_profile')]
-    // public function profile(Request $request, EntityManagerInterface $em, UserInterface $user): Response
-    // {
-    //     $form = $this->createForm(UserType::class, $user);
+    #[Route('/profile/{id}/followers', name: 'app_profile_followers')]
+    public function followers(User $user): Response
+    {
+        return $this->render('profile/followers.html.twig', [
+            'user' => $user,
+            'followers' => $user->getFollowed(),
+        ]);
+    }
 
-    //     $form->handleRequest($request);
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $em->persist($user);
-    //         $em->flush();
-
-    //         $this->addFlash('success', 'Profil mis à jour !');
-    //         return $this->redirectToRoute('app_profile');
-    //     }
-
-    //     return $this->render('profile/profile.html.twig', [
-    //         'form' => $form->createView(),
-    //         'user' => $user,
-    //     ]);
-    // }
+    #[Route('/profile/{id}/following', name: 'app_profile_following')]
+    public function following(User $user): Response
+    {
+        return $this->render('profile/following.html.twig', [
+            'user' => $user,
+            'following' => $user->getFollowing(),
+        ]);
+    }
 }

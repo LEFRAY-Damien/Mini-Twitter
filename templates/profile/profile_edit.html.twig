@@ -3,61 +3,60 @@
 {% block title %}Modifier le profil{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gray-100 py-10">
 
-  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg px-8 pb-10">
+<div class="min-h-screen bg-[#15202B] py-10">
 
-    <h1 class="text-2xl font-bold text-gray-800 text-center mt-6 mb-8">Modifier le profil</h1>
+  <div class="max-w-3xl mx-auto bg-[#192734] rounded-2xl shadow-lg px-8 pb-10 text-white">
 
+<h1 class="text-2xl font-bold text-center mt-6 mb-8 text-white">Modifier le profil</h1>
 
-    {% for message in app.flashes('success') %}
-    <div class="mb-4 bg-green-100 border border-green-300 text-green-800 p-3 rounded-lg text-center">
-      {{ message }}
-    </div>
-    {% endfor %}
+{% for message in app.flashes('success') %}
+  <div class="mb-4 bg-green-900/30 border border-green-500 text-green-400 p-3 rounded-lg text-center">
+    {{ message }}
+  </div>
+{% endfor %}
 
-    {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
-    <div>
-      {{ form_label(form.username, null, {'label_attr': {'class': 'block font-semibold text-gray-700'}}) }}
-      {{ form_widget(form.username, {'attr': {'class': 'w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg
-      focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
-      {{ form_errors(form.username) }}
-    </div>
+<div>
+  {{ form_label(form.username, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
+  {{ form_widget(form.username, {'attr': {'class': 'w-full mt-1 px-3 py-2 bg-[#15202B] border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#1DA1F2]'}}) }}
+  {{ form_errors(form.username) }}
+</div>
 
+<div>
+  {{ form_label(form.email, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
+  {{ form_widget(form.email, {'attr': {'class': 'w-full mt-1 px-3 py-2 bg-[#15202B] border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#1DA1F2]'}}) }}
+  {{ form_errors(form.email) }}
+</div>
 
-    <div>
-      {{ form_label(form.email, null, {'label_attr': {'class': 'block font-semibold text-gray-700'}}) }}
-      {{ form_widget(form.email, {'attr': {'class': 'w-full mt-1 px-3 py-2 border border-gray-300 rounded-lg
-      focus:outline-none focus:ring-2 focus:ring-blue-500'}}) }}
-      {{ form_errors(form.email) }}
-    </div>
+{% set avatarField = form.avatar %}
+<div class="mt-4 flex items-center space-x-4">
+  <img id="avatarPreview"
+       src="{{ asset(user.avatar ? 'uploads/avatars/' ~ user.avatar : 'images/default-avatar.png') }}"
+       alt="Avatar"
+       class="w-24 h-24 rounded-full border-4 border-[#192734] shadow-md object-cover">
 
-    {% set avatarField = form.avatar %}
-    <div class="mt-4 flex items-center space-x-4">
-      <img id="avatarPreview"
-        src="{{ asset(user.avatar ? 'uploads/avatars/' ~ user.avatar : 'images/default-avatar.png') }}" alt="Avatar"
-        class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover">
-
-      <div class="flex-1">
-        {{ form_label(avatarField) }}
-        {{ form_widget(avatarField, {'attr': {'id': 'avatarInput'}}) }}
-        {{ form_errors(avatarField) }}
-      </div>
-    </div>
-    <div class="flex justify-end space-x-2 mt-6">
-      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow transition">
-        Enregistrer
-      </button>
-      <a href="{{ path('app_profile') }}"
-        class="border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-        Annuler
-      </a>
-    </div>
-
-    {{ form_end(form) }}
-
+  <div class="flex-1">
+    {{ form_label(avatarField, null, {'label_attr': {'class': 'block font-semibold text-gray-300'}}) }}
+    {{ form_widget(avatarField, {'attr': {'id': 'avatarInput', 'class': 'text-gray-300'}}) }}
+    {{ form_errors(avatarField) }}
   </div>
 </div>
 
+<div class="flex justify-end space-x-2 mt-6">
+  <button type="submit" class="bg-[#1DA1F2] hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow transition">
+    Enregistrer
+  </button>
+  <a href="{{ path('app_profile') }}"
+     class="border border-gray-600 text-gray-300 px-4 py-2 rounded-lg hover:bg-[#1DA1F2]/10 transition">
+    Annuler
+  </a>
+</div>
+
+{{ form_end(form) }}
+
+
+  </div>
+</div>
 {% endblock %}
