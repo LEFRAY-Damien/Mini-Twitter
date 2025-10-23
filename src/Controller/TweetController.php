@@ -20,7 +20,7 @@ final class TweetController extends AbstractController
     #[IsGranted('ROLE_USER')]
     #[Route(name: 'app_tweet_index', methods: ['GET'])]
     public function index(TweetRepository $tweetRepository): Response
-    {   
+    {
         return $this->render('tweet/index.html.twig', [
             'tweets' => $tweetRepository->findAll(),
         ]);
@@ -66,6 +66,7 @@ final class TweetController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'app_tweet_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Tweet $tweet): Response
@@ -75,17 +76,39 @@ final class TweetController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/{id}', name: 'app_tweet_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function delete(Request $request, Tweet $tweet, EntityManagerInterface $entityManager): Response
+    #[IsGranted('ROLE_USER')]
+    #[Route('/tweet/{id}/delete', name: 'app_tweet_delete')]
+    public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tweet->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($tweet);
-            $entityManager->flush();
+
+        // SUPPRESSION DU FICHIER IMAGE ASSOCIÉ AU TWEET
+        $mediaFilename = $tweet->getMedia();
+        if ($mediaFilename) {
+            $mediaPath = $this->getParameter('media_directory') . '/' . $mediaFilename;
+            if (file_exists($mediaPath)) {
+                unlink($mediaPath); 
+            }
         }
 
-        return $this->redirectToRoute('app_tweet_index', [], Response::HTTP_SEE_OTHER);
+        foreach ($tweet->getReports() as $report) {
+            $em->remove($report);
+        }
+
+        foreach ($tweet->getRetweets() as $retweet) {
+            $em->remove($retweet);
+        }
+
+        foreach ($tweet->getLikes() as $like) {
+            $em->remove($like);
+        }
+        $em->remove($tweet);
+        $em->flush();
+
+        $this->addFlash('success', 'Tweet et retweets supprimés !');
+
+        return $this->redirectToRoute('app_tweet_index');
     }
+
 
     //    #[Route('/listTweets/{id}', name: 'app_tweet_show')]
     //     public function showTweet(int $id, TweetRepository $tweetRepository  ) : Response
@@ -99,5 +122,5 @@ final class TweetController extends AbstractController
     //             'tweet' => $tweet
     //         ])
     //     }
-    
+
 }

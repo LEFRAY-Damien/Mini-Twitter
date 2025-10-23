@@ -58,7 +58,16 @@ final class AdminController extends AbstractController
     #[Route(('/tweet/{id}/delete'), name: 'app_admin_delete_tweet', requirements: ['id' => '\d+'])]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
-        
+       
+         // SUPPRESSION DU FICHIER IMAGE ASSOCIÉ AU TWEET
+        $mediaFilename = $tweet->getMedia();
+        if ($mediaFilename) {
+            $mediaPath = $this->getParameter('media_directory') . '/' . $mediaFilename;
+            if (file_exists($mediaPath)) {
+                unlink($mediaPath); 
+            }
+        }
+
         foreach ($tweet->getReports() as $report) {
             $em->remove($report);
         }
