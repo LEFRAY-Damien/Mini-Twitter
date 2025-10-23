@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -22,8 +21,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
-    #[Assert\NotBlank(message: "L\'email est obligatoire.")]
-    #[Assert\Email(message: "L\'email '{{ value }}' n\'est pas valide.")]
     private ?string $email = null;
 
     /**
@@ -39,17 +36,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Regex(
-    pattern: "/^[\p{L}\p{N}\s_\-.,!?()\"]+$/u",
-    message: "Le nom d'utilisateur est invalide."
-    )]
-    #[Assert\Length(
-    min: 3,
-    max: 50,
-    minMessage: "Le nom doit contenir au moins 3 caractères.",
-    maxMessage: "Le nom ne peut pas dépasser 50 caractères."
-    )]
-    #[Assert\NotBlank(message: "Le pseudonyme est obligatoire.")]
     private ?string $username = null;
 
     public function __construct() {
@@ -72,7 +58,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $tweets;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Url]
     private ?string $avatar = null;
 
     /**

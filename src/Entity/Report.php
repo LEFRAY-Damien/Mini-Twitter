@@ -5,7 +5,6 @@ namespace App\Entity;
 use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReportRepository::class)]
 class Report
@@ -22,11 +21,6 @@ class Report
     private ?Tweet $tweet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Assert\NotBlank(message: 'La raison ne doit pas être vide.')]
-    #[Assert\Regex(
-        pattern: "/^[a-zA-Z0-9_]+$/",
-        message: "La raison ne peut contenir que des lettres, des chiffres ou des underscores."
-    )]
     private ?string $reason = null;
 
     #[ORM\Column(length: 21)]

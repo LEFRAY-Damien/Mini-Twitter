@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class TweetType extends AbstractType
 {
@@ -27,12 +28,15 @@ class TweetType extends AbstractType
                     'style' => 'resize: none;',
                     'rows' => 4,
                     'cols' => 60,
-                    'class' => 'text-neutral-400 border-1 border-neutral-600 rounded-lg p-3'
+                    'class' => 'text-white border border-white rounded-lg p-3 bg-[#15202B]'
                 ],
                 'constraints' => [
                     new Regex([
                         'pattern' => '/^[\p{L}\p{N}\s_\-.,!?()\'"]+$/u',
                         'message' => 'Le tweet doit contenir seulement des lettres, chiffres ou underscores.'
+                    ]),
+                    new Assert\NotBlank([
+                        'message' => 'Le tweet ne peut pas être vide.'
                     ])
                 ]
             ])
@@ -54,8 +58,7 @@ class TweetType extends AbstractType
                 'attr' => [
                     'class' => 'text-white'
                 ]
-            ]);
-        ;
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
