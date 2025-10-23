@@ -4,6 +4,9 @@
 {% endblock %}
 
 {% block body %}
+
+	{% include 'components/_search_data.html.twig' %}
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 	<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css"/>
 
@@ -19,7 +22,7 @@
 		<!-- Liste des tweets -->
 
 		<div class="w-full max-w-2xl space-y-4">
-			{% if tweets is not empty %}
+			{% if tweets|length %}
 				{% for tweet in tweets %}
 					<div class="p-4 bg-[#15202B] border border-neutral-700 rounded-xl hover:bg-[#192734] transition">
 						<div class="flex justify-between items-start">
@@ -32,92 +35,96 @@
 									<p class="text-neutral-400 text-sm">{{ tweet.createdAt|date('d/m/Y H:i', "Europe/Paris") }}</p>
 								</div>
 							</div>
+							{# {% if tweets is not empty %} #}
+							{# {% if tweets|length %} #}
+								<div>
 
-							<div class="relative">
-								<button type="button" class="text-neutral-400 hover:text-white" onclick="toggleMenu('{{ tweet.id }}')">⋯</button>
-								<div id="menu-{{ tweet.id }}" class="hidden absolute right-0 mt-2 w-40 bg-[#192734] border border-neutral-700 rounded-lg shadow-lg z-10">
-									{% if app.user %}
-										{% set dejaSignale = false %}
-										{% for r in tweet.reports %}
-											{% if r.reported == app.user %}
-												{% set dejaSignale = true %}
+									<div class="relative">
+										<button type="button" class="text-neutral-400 hover:text-white" onclick="toggleMenu('{{ tweet.id }}')">⋯</button>
+										<div id="menu-{{ tweet.id }}" class="hidden absolute right-0 mt-2 w-40 bg-[#192734] border border-neutral-700 rounded-lg shadow-lg z-10">
+											{% if app.user %}
+												{% set dejaSignale = false %}
+												{% for r in tweet.reports %}
+													{% if r.reported == app.user %}
+														{% set dejaSignale = true %}
+													{% endif %}
+												{% endfor %}
+												{% if dejaSignale %}
+													<button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">Déjà
+																													signalé</button>
+												{% else %}
+													<form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
+														<button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">Signaler</button>
+													</form>
+												{% endif %}
 											{% endif %}
-										{% endfor %}
-										{% if dejaSignale %}
-											<button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">Déjà
-																			signalé</button>
-										{% else %}
-											<form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
-												<button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">Signaler</button>
-											</form>
-										{% endif %}
-									{% endif %}
+										</div>
+									</div>
 								</div>
+								<div class="pt-3">
+									<p>{{ tweet.content }}</p>
+								</div>
+
+								{% if tweet.media %}
+									<img src="{{ asset('uploads/media/' ~ tweet.media) }}" class="mt-3 rounded-md">
+								{% endif %}
+
+								<div class="flex flex-row items-center justify-between mt-3">
+									<div class="flex space-x-3">
+										<a href="{{ path('app_replies_new', {'id': tweet.id})}}" class="flex items-center">
+											<i class="icon-message-square-reply"></i>
+											<span class="text-white ml-2">{{ tweet.replies.count }}</span>
+										</a>
+										<a href="{{ path('app_like_new', {'id': tweet.id}) }}" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+											<i class="fa-solid fa-heart fa-xs
+																										{% for like in tweet.likes %}
+																										{% if app.user == like.user %} text-red-500 {% endif %}
+																										{% endfor %}"></i>
+											<span class="text-white ml-1">{{ tweet.likes.count }}</span>
+										</a>
+
+										<a href="{{ path('app_retweet_add', {'id': tweet.id}) }}" class="flex items-center hover:text-[#1DA1F2] transition-colors duration-300">
+											<i class="icon-repeat-2
+																										{% for retweet in tweet.retweets %}
+																										{% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
+																										{% endfor %}"></i>
+											<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
+										</a>
+									</div>
+
+									{# MODIFICATION : Le bouton de suppression n'est visible que par l'auteur du tweet #}
+									{# {% if app.user == tweet.user %} #}
+									{% if app.user == tweet.user or is_granted('ROLE_ADMIN') %}
+										<form method="POST" action="{{ path('app_tweet_delete', {'id': tweet.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce tweet ?');" class="inline">
+
+											<input type="hidden" name="_method" value="DELETE">
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+
+											<button type="submit" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+												<i class="fa-solid fa-trash"></i>
+												<span class="text-white ml-1"></span>
+											</button>
+										</form>
+									{% endif %}
+
+								</div>
+
 							</div>
-						</div>
-						<div class="pt-3">
-							<p>{{ tweet.content }}</p>
-						</div>
+						{% endfor %}
+					{% else %}
+						<span class="text-neutral-400">Personne n'a encore écrit de tweet.</span>
+					{% endif %}
 
-						{% if tweet.media %}
-							<img src="{{ asset('uploads/media/' ~ tweet.media) }}" class="mt-3 rounded-md">
-						{% endif %}
+				</div>
+			</div>
 
-						<div class="flex flex-row items-center justify-between mt-3">
-							<div class="flex space-x-3">
-								<a href="{{ path('app_replies_new', {'id': tweet.id})}}" class="flex items-center">
-									<i class="icon-message-square-reply"></i>
-									<span class="text-white ml-2">{{ tweet.replies.count }}</span>
-								</a>
-								<a href="{{ path('app_like_new', {'id': tweet.id}) }}" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
-									<i class="fa-solid fa-heart fa-xs
-										              {% for like in tweet.likes %}
-										                {% if app.user == like.user %} text-red-500 {% endif %}
-										              {% endfor %}"></i>
-									<span class="text-white ml-1">{{ tweet.likes.count }}</span>
-								</a>
-
-								<a href="{{ path('app_retweet_add', {'id': tweet.id}) }}" class="flex items-center hover:text-[#1DA1F2] transition-colors duration-300">
-									<i class="icon-repeat-2
-										              {% for retweet in tweet.retweets %}
-										                {% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
-										              {% endfor %}"></i>
-									<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
-								</a>
-							</div>
-
-							{# MODIFICATION : Le bouton de suppression n'est visible que par l'auteur du tweet #}
-							{# {% if app.user == tweet.user %} #}
-							{% if app.user == tweet.user or is_granted('ROLE_ADMIN') %}
-								<form method="POST" action="{{ path('app_tweet_delete', {'id': tweet.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce tweet ?');" class="inline">
-
-									<input type="hidden" name="_method" value="DELETE">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
-
-									<button type="submit" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
-										<i class="fa-solid fa-trash"></i>
-										<span class="text-white ml-1"></span>
-									</button>
-								</form>
-							{% endif %}
-
-						</div>
-
-					</div>
-				{% endfor %}
-			{% else %}
-				<span class="text-neutral-400">Personne n'a encore écrit de tweet.</span>
-			{% endif %}
-
-		</div>
-	</div>
-
-	<script>
-		function toggleMenu(id) {
+			<script>
+				function toggleMenu(id) {
 const menu = document.getElementById('menu-' + id);
 document.querySelectorAll('[id^="menu-"]').forEach(m => {
 if (m !== menu) 
 m.classList.add('hidden');
+
 
 });
 menu.classList.toggle('hidden');
@@ -128,6 +135,6 @@ if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="to
 document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
 }
 });
-	</script>
+			</script>
 
-{% endblock %}
+		{% endblock %}
