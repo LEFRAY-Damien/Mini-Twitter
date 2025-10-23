@@ -26,7 +26,7 @@
 							<div class="flex items-center space-x-3">
 								<img src="{{ asset(tweet.user.avatar ? 'uploads/avatars/' ~ tweet.user.avatar : 'images/default-avatar.png') }}" alt="{{ tweet.user.username }}" class="w-10 h-10 rounded-full border-2 border-[#1DA1F2] object-cover">
 								<div>
-									<a href="{{ path('app_profile_view', {'id': tweet.user.id}) }}" class="font-bold hover:text-[#1DA1F2] transition">
+									<a href="{{ path('app_profile_tweets', {'id': tweet.user.id}) }}" class="font-bold hover:text-[#1DA1F2] transition">
 										{{ tweet.user.username }}
 									</a>
 									<p class="text-neutral-400 text-sm">{{ tweet.createdAt|date('d/m/Y H:i', "Europe/Paris") }}</p>
