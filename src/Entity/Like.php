@@ -15,9 +15,11 @@ class Like
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'tweets')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Tweet $tweet = null;
 
     public function getId(): ?int

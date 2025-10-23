@@ -15,9 +15,11 @@ class Report
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $reported = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Tweet $tweet = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
