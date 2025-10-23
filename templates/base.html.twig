@@ -20,10 +20,18 @@
 			<i class="fa-solid fa-bars text-white text-2xl"></i>
 		</button>
 
-		<div class="flex">
+		<div
+			class="flex">
 
 
-			{% if app.request.attributes.get('_route') not in ['app_login', 'app_register'] %}
+			{# {% if app.request.attributes.get('_route') not in ['app_login', 'app_register'] %} #}
+
+			{% if app.request.attributes.get('_route')  in ['app_home','app_profile_tweets', 'app_profile_edit', 'app_admin', 'app_profile',
+							 'app_replies_index', 'app_tweet_delete', 'app_tweet_show', 'app_tweet_new', 'app_profile_view', 'app_profile_retweets',
+							  'app_retweet_index', 'app_retweet_add', 'app_retweet_delete', 'app_profile_followers', 'app_retweet_edit', 'app_retweet_show', 'app_retweet_new',
+							   'app_report_form', 'app_replies_delete', 'app_replies_edit', 'app_replies_show', 'app_replies_new', 'app_tweet_report',
+							   'app_profile_following', 'app_follow_toggle', 'app_like_delete', 'app_like_edit', 'app_like_new', 'app_like_show', 'app_like_index',
+							   'app_admin_list_user', 'app_admin_disable_user', 'app_admin_ban_user', 'app_admin_delete_tweet', 'app_admin_delete_report', 'app_tweet_index'] %}
 				{% include 'sidebar/sidebar.html.twig' %}
 			{% endif %}
 
