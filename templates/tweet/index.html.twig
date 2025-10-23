@@ -1,123 +1,133 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tweets{% endblock %}
+{% block title %}Tweets
+{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css"/>
 
-<div class="w-full flex flex-col items-center justify-start min-h-screen bg-[#15202B] text-white">
+	<div
+		class="w-full flex flex-col items-center justify-start min-h-screen bg-[#15202B] text-white">
 
-	<!-- Bouton "Écrire un tweet" -->
+		<!-- Bouton "Écrire un tweet" -->
 
-	<a class="bg-[#1DA1F2] text-white p-3 mb-6 rounded-lg hover:bg-[#1A91DA] transition"
-		href="{{ path('app_tweet_new') }}">
-		Écrire un tweet
-	</a>
+		<a class="bg-[#1DA1F2] text-white p-3 mb-6 rounded-lg hover:bg-[#1A91DA] transition" href="{{ path('app_tweet_new') }}">
+			Écrire un tweet
+		</a>
 
-	<!-- Liste des tweets -->
+		<!-- Liste des tweets -->
 
-	<div class="w-full max-w-2xl space-y-4">
-		{% if tweets is not empty %}
-		{% for tweet in tweets %}
-		<div class="p-4 bg-[#15202B] border border-neutral-700 rounded-xl hover:bg-[#192734] transition">
-			<div class="flex justify-between items-start">
-				<div class="flex items-center space-x-3">
-					<img src="{{ asset(tweet.user.avatar ? 'uploads/avatars/' ~ tweet.user.avatar : 'images/default-avatar.png') }}"
-						alt="{{ tweet.user.username }}"
-						class="w-10 h-10 rounded-full border-2 border-[#1DA1F2] object-cover">
-					<div>
-						<a href="{{ path('app_profile_view', {'id': tweet.user.id}) }}"
-							class="font-bold hover:text-[#1DA1F2] transition">
-							{{ tweet.user.username }}
-						</a>
-						<p class="text-neutral-400 text-sm">{{ tweet.createdAt|date('d/m/Y H:i', "Europe/Paris") }}</p>
+		<div class="w-full max-w-2xl space-y-4">
+			{% if tweets is not empty %}
+				{% for tweet in tweets %}
+					<div class="p-4 bg-[#15202B] border border-neutral-700 rounded-xl hover:bg-[#192734] transition">
+						<div class="flex justify-between items-start">
+							<div class="flex items-center space-x-3">
+								<img src="{{ asset(tweet.user.avatar ? 'uploads/avatars/' ~ tweet.user.avatar : 'images/default-avatar.png') }}" alt="{{ tweet.user.username }}" class="w-10 h-10 rounded-full border-2 border-[#1DA1F2] object-cover">
+								<div>
+									<a href="{{ path('app_profile_tweets', {'id': tweet.user.id}) }}" class="font-bold hover:text-[#1DA1F2] transition">
+										{{ tweet.user.username }}
+									</a>
+									<p class="text-neutral-400 text-sm">{{ tweet.createdAt|date('d/m/Y H:i', "Europe/Paris") }}</p>
+								</div>
+							</div>
+
+							<div class="relative">
+								<button type="button" class="text-neutral-400 hover:text-white" onclick="toggleMenu('{{ tweet.id }}')">⋯</button>
+								<div id="menu-{{ tweet.id }}" class="hidden absolute right-0 mt-2 w-40 bg-[#192734] border border-neutral-700 rounded-lg shadow-lg z-10">
+									{% if app.user %}
+										{% set dejaSignale = false %}
+										{% for r in tweet.reports %}
+											{% if r.reported == app.user %}
+												{% set dejaSignale = true %}
+											{% endif %}
+										{% endfor %}
+										{% if dejaSignale %}
+											<button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">Déjà
+																			signalé</button>
+										{% else %}
+											<form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
+												<button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">Signaler</button>
+											</form>
+										{% endif %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						<div class="pt-3">
+							<p>{{ tweet.content }}</p>
+						</div>
+
+						{% if tweet.media %}
+							<img src="{{ asset('uploads/media/' ~ tweet.media) }}" class="mt-3 rounded-md">
+						{% endif %}
+
+						<div class="flex flex-row items-center justify-between mt-3">
+							<div class="flex space-x-3">
+								<a href="{{ path('app_replies_new', {'id': tweet.id})}}" class="flex items-center">
+									<i class="icon-message-square-reply"></i>
+									<span class="text-white ml-2">{{ tweet.replies.count }}</span>
+								</a>
+								<a href="{{ path('app_like_new', {'id': tweet.id}) }}" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+									<i class="fa-solid fa-heart fa-xs
+										              {% for like in tweet.likes %}
+										                {% if app.user == like.user %} text-red-500 {% endif %}
+										              {% endfor %}"></i>
+									<span class="text-white ml-1">{{ tweet.likes.count }}</span>
+								</a>
+
+								<a href="{{ path('app_retweet_add', {'id': tweet.id}) }}" class="flex items-center hover:text-[#1DA1F2] transition-colors duration-300">
+									<i class="icon-repeat-2
+										              {% for retweet in tweet.retweets %}
+										                {% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
+										              {% endfor %}"></i>
+									<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
+								</a>
+							</div>
+
+							{# MODIFICATION : Le bouton de suppression n'est visible que par l'auteur du tweet #}
+							{# {% if app.user == tweet.user %} #}
+							{% if app.user == tweet.user or is_granted('ROLE_ADMIN') %}
+								<form method="POST" action="{{ path('app_tweet_delete', {'id': tweet.id}) }}" onsubmit="return confirm('Voulez-vous supprimer ce tweet ?');" class="inline">
+
+									<input type="hidden" name="_method" value="DELETE">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tweet.id) }}">
+
+									<button type="submit" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
+										<i class="fa-solid fa-trash"></i>
+										<span class="text-white ml-1"></span>
+									</button>
+								</form>
+							{% endif %}
+
+						</div>
+
 					</div>
-				</div>
-
-				<div class="relative">
-					<button type="button" class="text-neutral-400 hover:text-white"
-						onclick="toggleMenu('{{ tweet.id }}')">⋯</button>
-					<div id="menu-{{ tweet.id }}"
-						class="hidden absolute right-0 mt-2 w-40 bg-[#192734] border border-neutral-700 rounded-lg shadow-lg z-10">
-						{% if app.user %}
-						{% set dejaSignale = false %}
-						{% for r in tweet.reports %}
-						{% if r.reported == app.user %}
-						{% set dejaSignale = true %}
-						{% endif %}
-						{% endfor %}
-						{% if dejaSignale %}
-						<button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">Déjà
-							signalé</button>
-						{% else %}
-						<form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
-							<button type="submit"
-								class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">Signaler</button>
-						</form>
-						{% endif %}
-						{% endif %}
-					</div>
-				</div>
-			</div>
-			<div class="pt-3">
-				<p>{{ tweet.content }}</p>
-			</div>
-
-			{% if tweet.media %}
-			<img src="{{ asset('uploads/media/' ~ tweet.media) }}" class="mt-3 rounded-md">
+				{% endfor %}
+			{% else %}
+				<span class="text-neutral-400">Personne n'a encore écrit de tweet.</span>
 			{% endif %}
 
-			<div class="flex flex-row items-center justify-between mt-3">
-				<div class="flex space-x-3">
-					<a href="{{ path('app_replies_new', {'id': tweet.id})}}" class="flex items-center">
-						<i class="icon-message-square-reply"></i>
-						<span class="text-white ml-2">{{ tweet.replies.count }}</span> 
-					</a>
-					<a href="{{ path('app_like_new', {'id': tweet.id}) }}"
-						class="text-gray-400 hover:text-red-500 transition-colors duration-300">
-						<i class="fa-solid fa-heart fa-xs
-              {% for like in tweet.likes %}
-                {% if app.user == like.user %} text-red-500 {% endif %}
-              {% endfor %}"></i>
-						<span class="text-white ml-1">{{ tweet.likes.count }}</span>
-					</a>
-
-					<a href="{{ path('app_retweet_add', {'id': tweet.id}) }}"
-						class="flex items-center hover:text-[#1DA1F2] transition-colors duration-300">
-						<i class="icon-repeat-2
-              {% for retweet in tweet.retweets %}
-                {% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
-              {% endfor %}"></i>
-						<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
-					</a>
-				</div>
-			</div>
-
 		</div>
-		{% endfor %}
-		{% else %}
-		<span class="text-neutral-400">Personne n'a encore écrit de tweet.</span>
-		{% endif %}
-
 	</div>
-</div>
 
-    <script>
-    function toggleMenu(id) {
-        const menu = document.getElementById('menu-' + id);
-        document.querySelectorAll('[id^="menu-"]').forEach(m => {
-            if (m !== menu) 
-                m.classList.add('hidden');
-        });
-        menu.classList.toggle('hidden');
-    }
+	<script>
+		function toggleMenu(id) {
+const menu = document.getElementById('menu-' + id);
+document.querySelectorAll('[id^="menu-"]').forEach(m => {
+if (m !== menu) 
+m.classList.add('hidden');
 
-	document.addEventListener('click', (e) => {
-		if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
-			document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
-		}
-	});
-</script>
+});
+menu.classList.toggle('hidden');
+}
+
+document.addEventListener('click', (e) => {
+if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
+document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+}
+});
+	</script>
 
 {% endblock %}

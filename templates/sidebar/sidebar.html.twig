@@ -17,7 +17,7 @@
 				<i class="fa-solid fa-retweet text-xl"></i>
 				Retweets
 			</a>
-			<a href="{{ path('app_profile') }}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
+			<a href="{{ path('app_profile_tweets',{'id': app.user.id})}}" class="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-800 transition">
 				<i class="fa-solid fa-user text-xl"></i>
 				Profil
 			</a>
