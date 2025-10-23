@@ -48,7 +48,7 @@
 										{% endfor %}
 										{% if dejaSignale %}
 											<button disabled class="w-full text-left px-4 py-2 text-neutral-400 cursor-not-allowed">Déjà
-																																									signalé</button>
+																																																					signalé</button>
 										{% else %}
 											<form action="{{ path('app_report_form', {id: tweet.id}) }}" method="post" data-turbo="false">
 												<button type="submit" class="w-full text-left px-4 py-2 hover:bg-[#1A91DA] rounded">Signaler</button>
@@ -74,17 +74,17 @@
 								</a>
 								<a href="{{ path('app_like_new', {'id': tweet.id}) }}" class="text-gray-400 hover:text-red-500 transition-colors duration-300">
 									<i class="fa-solid fa-heart fa-xs
-																																				{% for like in tweet.likes %}
-																																				{% if app.user == like.user %} text-red-500 {% endif %}
-																																				{% endfor %}"></i>
+																																														{% for like in tweet.likes %}
+																																														{% if app.user == like.user %} text-red-500 {% endif %}
+																																														{% endfor %}"></i>
 									<span class="text-white ml-1">{{ tweet.likes.count }}</span>
 								</a>
 
 								<a href="{{ path('app_retweet_add', {'id': tweet.id}) }}" class="flex items-center hover:text-[#1DA1F2] transition-colors duration-300">
 									<i class="icon-repeat-2
-																																				{% for retweet in tweet.retweets %}
-																																				{% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
-																																				{% endfor %}"></i>
+																																														{% for retweet in tweet.retweets %}
+																																														{% if app.user == retweet.user %} text-[#1DA1F2] {% endif %}
+																																														{% endfor %}"></i>
 									<span class="text-white ml-1">{{ tweet.retweets.count }}</span>
 								</a>
 							</div>
@@ -109,7 +109,9 @@
 					</div>
 				{% endfor %}
 			{% else %}
-				<span class="text-neutral-400">Personne n'a encore écrit de tweet.</span>
+				<div class="flex items-center">
+					<span class="text-neutral-400 m-auto text-lg">Personne n'a encore écrit de tweet.</span>
+				</div>
 			{% endif %}
 
 		</div>
@@ -117,22 +119,22 @@
 
 	<script>
 		function toggleMenu(id) {
-		const menu = document.getElementById('menu-' + id);
-		document.querySelectorAll('[id^="menu-"]').forEach(m => {
-		if (m !== menu) 
-		m.classList.add('hidden');
+const menu = document.getElementById('menu-' + id);
+document.querySelectorAll('[id^="menu-"]').forEach(m => {
+if (m !== menu) 
+m.classList.add('hidden');
 
 
 
-		});
-		menu.classList.toggle('hidden');
-		}
+});
+menu.classList.toggle('hidden');
+}
 
-		document.addEventListener('click', (e) => {
-		if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
-		document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
-		}
-		});
+document.addEventListener('click', (e) => {
+if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
+document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+}
+});
 	</script>
 
 {% endblock %}

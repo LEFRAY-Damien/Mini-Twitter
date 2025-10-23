@@ -6,24 +6,26 @@
 {% block body %}
 	<div class="w-full h-screen bg-[#15202B]">
 		<div class="pt-5 flex items-center justify-center flex-col">
-			<h1 class="text-white pb-5">Écrire un tweet</h1>
+			<h1 class="text-white pb-5 font-bold text-xl">Écrire un tweet</h1>
 
-		<div class="w-full bg-[#192734] rounded-xl shadow-lg p-6">
+			<div class="w-auto bg-[#192734] rounded-xl shadow-lg px-16 py-6">
 
-			{% if form.vars.errors|length > 0 %}
-				<div class="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500 text-red-300">
-					<ul class="list-disc list-inside">
-						{% for error in form.vars.errors %}
-							<li>{{ error.message }}</li>
-						{% endfor %}
-					</ul>
-				</div>
-			{% endif %}
+				{% if form.vars.errors|length > 0 %}
+					<div class="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500 text-red-300">
+						<ul class="list-disc list-inside">
+							{% for error in form.vars.errors %}
+								<li>{{ error.message }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
 
-			{{ include('tweet/_form.html.twig') }}
+				{{ include('tweet/_form.html.twig') }}
+			</div>
+
 		</div>
-
+		<div class="mt-10 ml-4">
+			<a class="bg-[#1DA1F2] hover:bg-[#1A91DA] text-white p-3 rounded-lg" href="{{ path('app_tweet_index')}}">Retour au fil d'actualités</a>
 		</div>
-        <a class="bg-[#1DA1F2] text-white p-3 rounded-lg" href="{{ path('app_tweet_index')}}">Retour au fil d'actualités</a>
 	</div>
 {% endblock %}
