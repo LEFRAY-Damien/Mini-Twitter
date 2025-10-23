@@ -1,22 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ReportController!{% endblock %}
+{% block title %}Hello ReportController!
+{% endblock %}
 
 {% block body %}
 
-<div class="max-w-md mx-auto mt-10 p-6 bg-[#15202B] text-white rounded-lg">
-    <h2 class="text-xl font-bold mb-4">Signaler le tweet</h2>
+	<div class="max-w-md mx-auto mt-10 p-6 bg-[#15202B] text-white rounded-lg">
+		<h2 class="text-xl font-bold mb-4">Signaler le tweet</h2>
 
-    <div class="mb-4">
-        <p><strong>{{ tweet.user.username }}</strong>: {{ tweet.content }}</p>
-    </div>
+		<div class="mb-4">
+			<p>
+				<strong>{{ tweet.user.username }}</strong>:
+				{{ tweet.content }}</p>
+		</div>
 
-    {{ form_start(form) }}
-        {{ form_row(form.reason) }}
-        <button type="submit" class="bg-red-500 hover:bg-red-400 text-white px-4 py-2 rounded">
-            Signaler
-        </button>
-    {{ form_end(form) }}
-</div>
+		{{ form_start(form) }}
+		<div>
+			{{ form_widget(form.reason) }}
+			<div class="text-red-400 text-sm mt-1 mb-4">
+						{{ form_errors(form.reason) }}
+				</div>
+			<button type="submit" class="bg-red-500 hover:bg-red-400 text-white px-4 py-3 rounded mt-2">
+				Signaler
+			</button>
+			{{ form_end(form) }}
+		</div>
+	</div>
 
 {% endblock %}

@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TweetRepository::class)]
 class Tweet
@@ -18,10 +17,6 @@ class Tweet
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Assert\Length(
-        max: 280,
-        maxMessage: 'Vous ne pouvez pas écrire un tweet de plus de {{ limit }} caractères',
-    )]
     private ?string $content = null;
 
     #[ORM\Column]
