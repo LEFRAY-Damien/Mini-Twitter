@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page 404{% endblock %}
+
+{% block body %}
+<section class="w-full h-screen bg-[#1DA1F2] flex flex-col justify-center items-center text-center">
+  <h2 class="mb-2 text-[50px] font-bold leading-none text-white sm:text-[80px] md:text-[100px]">
+    404
+  </h2>
+  <h4 class="mb-3 text-[22px] font-semibold leading-tight text-white">
+    Oops! Page introuvable
+  </h4>
+  <p class="mb-8 text-lg text-white">
+    La page que vous recherchez n'existe pas.
+  </p>
+  <a href="{{ path('app_home') }}"
+     class="inline-block rounded-lg border border-white px-6 py-2 text-base font-semibold text-white transition hover:bg-white hover:text-[#1DA1F2]">
+    Retour à l'accueil
+  </a>
+</section>
+{% endblock %}
