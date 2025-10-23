@@ -117,22 +117,22 @@
 
 	<script>
 		function toggleMenu(id) {
-const menu = document.getElementById('menu-' + id);
-document.querySelectorAll('[id^="menu-"]').forEach(m => {
-if (m !== menu) 
-m.classList.add('hidden');
+		const menu = document.getElementById('menu-' + id);
+		document.querySelectorAll('[id^="menu-"]').forEach(m => {
+		if (m !== menu) 
+		m.classList.add('hidden');
 
 
 
-});
-menu.classList.toggle('hidden');
-}
+		});
+		menu.classList.toggle('hidden');
+		}
 
-document.addEventListener('click', (e) => {
-if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
-document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
-}
-});
+		document.addEventListener('click', (e) => {
+		if (!e.target.closest('[id^="menu-"]') && !e.target.closest('button[onclick^="toggleMenu"]')) {
+		document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+		}
+		});
 	</script>
 
 {% endblock %}
