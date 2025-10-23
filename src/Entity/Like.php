@@ -14,7 +14,7 @@ class Like
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tweet')]
+    #[ORM\ManyToOne(inversedBy: 'tweets')]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]

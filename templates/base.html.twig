@@ -20,17 +20,17 @@
 			<i class="fa-solid fa-bars text-white text-2xl"></i>
 		</button>
 
-		<div
-			class="flex">
+		<div class="flex">
 
-			{% include 'sidebar/sidebar.html.twig' %}
+
+			{% if app.request.attributes.get('_route') not in ['app_login', 'app_register'] %}
+				{% include 'sidebar/sidebar.html.twig' %}
+			{% endif %}
 
 
 			<!-- Contenu principal -->
 			<main class="flex-1 p-6 flex justify-center md:ml-56">
-				<div class="max-w-4xl w-full space-y-6 rounded-2xl shadow-lg bg-[#15202B]"> 
-        {% block body %}
-        {% endblock %}
+				<div class="max-w-4xl w-full space-y-6 rounded-2xl shadow-lg bg-[#15202B]"> {% block body %}{% endblock %}
 					</div>
 				</main>
 
@@ -49,9 +49,3 @@ sidebar.classList.toggle('-translate-x-full');
 
 
 	</html>
-
-      {# {% if tweet.media %}
-
-							<img src="{{ asset('uploads/media/' ~ tweet.media) }}" class ="mt-3 rounded-md">
-
-                            {% endif %} #}
