@@ -11,5 +11,5 @@ class SearchData
     /**
      * @var string
      */
-    public string $q ='';
+    public string $q;
 }
