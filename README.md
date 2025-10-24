@@ -22,9 +22,10 @@ Node.js & npm (si le projet contient du front compilé avec Webpack Encore)
 # Installation:
 
 Cloner le projet :
-
-git clone https://github.com/ton-pseudo/mini-twitter.git
+```bash
+git clone https://github.com/LEFRAY-Damien/Mini-Twitter
 cd mini-twitter
+```
 
 Installer les dépendances PHP :
 
@@ -43,34 +44,34 @@ Base de données & migrations
 
 Créer la base de données :
 
-- php bin/console doctrine:database:create
+``php bin/console doctrine:database:create``
 
 # Lancer les migrations :
 
-php bin/console doctrine:migrations:migrate
+``php bin/console doctrine:migrations:migrate``
 
-Création d’un utilisateur administrateur
+### Création d’un utilisateur administrateur
 
-Via une commande Symfony :
+- Via une commande Symfony :
 
-php bin/console app:create-admin
+``php bin/console app:create-admin``
 
 
 # Fonctionnalités principales
 
-Inscription et authentification des utilisateurs
+- Inscription et authentification des utilisateurs
 
-Création, modification et suppression de tweets
+- Création, modification et suppression de tweets
 
-Like / Unlike des tweets
+- Like / Unlike des tweets
 
-Système d’abonnement entre utilisateurs
+- Système d’abonnement entre utilisateurs
 
-Fil d’actualité personnalisé (tweets des utilisateurs suivis)
+- Fil d’actualité personnalisé (tweets des utilisateurs suivis)
 
-Interface d’administration (gestion des utilisateurs et des tweets)
+- Interface d’administration (gestion des utilisateurs et des tweets)
 
-Interface responsive adaptée aux mobiles:
+- Interface responsive adaptée aux mobiles:
 
 # User Stories réalisées:
 
