@@ -21,6 +21,11 @@
                 </div>
                 {% endif %}
 
+                {% if user.isBanned %}
+                <span class="text-red-500">(Banni)</span>
+                {% elseif user.isActive %}
+                <span class="text-yellow-400">(Suspendu)</span>
+                {% endif %}
                 <div class="flex flex-col">
                     <span class="font-bold text-lg text-white">{{ user.username }}</span>
                     <span class="text-neutral-400 text-sm">Créé le {{ user.createdAt|date('d/m/Y H:i') }}</span>

@@ -68,5 +68,4 @@ final class ReportController extends AbstractController
                      'reports' => $reports,
                 ]);
         }
-        
 }

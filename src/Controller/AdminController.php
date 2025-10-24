@@ -43,7 +43,7 @@ final class AdminController extends AbstractController
         ]);
     }
     //supprimer report
-    #[Route(('/report/{id}/delete'),name: 'app_admin_delete_report', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route(('/report/{id}/delete'), name: 'app_admin_delete_report', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function deleteReport(Report $report, EntityManagerInterface $em): Response
     {
         $em->remove($report);
@@ -58,28 +58,27 @@ final class AdminController extends AbstractController
     #[Route(('/tweet/{id}/delete'), name: 'app_admin_delete_tweet', requirements: ['id' => '\d+'])]
     public function deleteTweet(Tweet $tweet, EntityManagerInterface $em): Response
     {
-       
-         // SUPPRESSION DU FICHIER IMAGE ASSOCIÉ AU TWEET
+
+        // SUPPRESSION DU FICHIER IMAGE ASSOCIÉ AU TWEET
         $mediaFilename = $tweet->getMedia();
         if ($mediaFilename) {
             $mediaPath = $this->getParameter('media_directory') . '/' . $mediaFilename;
             if (file_exists($mediaPath)) {
-                unlink($mediaPath); 
+                unlink($mediaPath);
             }
         }
 
         foreach ($tweet->getReports() as $report) {
             $em->remove($report);
         }
-        
+
         foreach ($tweet->getRetweets() as $retweet) {
             $em->remove($retweet);
         }
 
         foreach ($tweet->getLikes() as $like) {
-        $em->remove($like);
-        
-    }
+            $em->remove($like);
+        }
         $em->remove($tweet);
         $em->flush();
 
@@ -89,27 +88,28 @@ final class AdminController extends AbstractController
     }
 
     // Suspendre/Bannir un utilisateur (isBanned)
-        #[Route('/user/{id}/ban', name: 'app_admin_ban_user', requirements: ['id' => '\d+'])]
-        public function banUser(User $user, EntityManagerInterface $em) : Response
-        {
-            $user->setIsBanned(true);
+    #[Route('/user/{id}/ban', name: 'app_admin_ban_user', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function banUser(User $user, EntityManagerInterface $em): Response
+    {
+        $user->setIsBanned(true);
 
+        $em->persist($user); // Sécurité supplémentaire
         $em->flush();
 
         $this->addFlash('success', "{$user->getUsername()} a été banni !");
-
         return $this->redirectToRoute('app_admin');
     }
 
     // Désactivé un compte utilisateurs (isActive)
-    #[Route('/user/{id}/disable', name: 'app_admin_disable_user', requirements: ['id' => '\d+'])]
-    public function disableUser(User $user, EntityManagerInterface $em) : Response
+    #[Route('/user/{id}/disable', name: 'app_admin_disable_user', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function disableUser(User $user, EntityManagerInterface $em): Response
     {
-        $user->setIsActive(false);
+        $user->setIsActive(true);
+
+        $em->persist($user);
         $em->flush();
 
         $this->addFlash('success', "{$user->getUsername()} a été désactivé.");
-
         return $this->redirectToRoute('app_admin');
     }
 }
