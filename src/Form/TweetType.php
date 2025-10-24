@@ -50,6 +50,7 @@ class TweetType extends AbstractType
                         'mimeTypes' => [
                             'image/jpeg',
                             'image/png',
+                            'image/webp',
                             'image/gif',
                         ],
                         'mimeTypesMessage' => 'Merci de choisir une image valide (jpeg, png, gif)',
