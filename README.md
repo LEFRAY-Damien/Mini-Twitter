@@ -205,4 +205,4 @@ Crédit by :
 - [@Damien](https://github.com/LEFRAY-Damien)
 - [@Kyllian](https://github.com/KyllianLerousseau)
 - [@Vincent](https://github.com/VincentLeducArinfo)
-- [@JohDoe]('NOT FOUND 🤔')
+- [@JohnDoe]('NOT FOUND 🤔')
