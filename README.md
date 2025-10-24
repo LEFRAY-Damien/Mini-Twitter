@@ -23,7 +23,7 @@ Node.js & npm (si le projet contient du front compilé avec Webpack Encore)
 
 Cloner le projet :
 
-git clone https://github.com/ton-pseudo/mini-twitter.git
+git clone https://github.com/LEFRAY-Damien/Mini-Twitter
 cd mini-twitter
 
 Installer les dépendances PHP :
