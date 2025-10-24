@@ -97,7 +97,7 @@ final class AdminController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', "{$user->getUsername()} a été banni !");
-        return $this->redirectToRoute('app_admin');
+        return $this->redirectToRoute('app_admin_list_user');
     }
 
     // Désactivé un compte utilisateurs (isActive)
@@ -110,6 +110,40 @@ final class AdminController extends AbstractController
         $em->flush();
 
         $this->addFlash('success', "{$user->getUsername()} a été désactivé.");
-        return $this->redirectToRoute('app_admin');
+        return $this->redirectToRoute('app_admin_list_user');
     }
+
+     #[Route('/user/{id}/unban', name: 'app_admin_unban_user', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function unbanUser(User $user, EntityManagerInterface $em): Response
+    {
+        if (!$user->isBanned()) {
+            $this->addFlash('info', "{$user->getUsername()} n'est pas banni.");
+            return $this->redirectToRoute('app_admin_list_user');
+        }
+
+        $user->setIsBanned(false);
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash('success', "{$user->getUsername()} a été débanni.");
+        return $this->redirectToRoute('app_admin_list_user');
+    }
+
+    #[Route('/user/{id}/enable', name: 'app_admin_enable_user', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function enableUser(User $user, EntityManagerInterface $em): Response
+    {
+        if (!$user->isActive()) {
+            $this->addFlash('info', "{$user->getUsername()} n'est pas suspendu.");
+            return $this->redirectToRoute('app_admin_list_user');
+        }
+
+        $user->setIsActive(false);
+        $em->persist($user);
+        $em->flush();
+
+        $this->addFlash('success', "{$user->getUsername()} a été réactivé.");
+        return $this->redirectToRoute('app_admin_list_user');
+    }
+
+
 }

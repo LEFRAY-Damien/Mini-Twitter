@@ -10,53 +10,75 @@
         {% for user in users %}
         <div
             class="bg-[#192734] p-4 rounded-2xl flex justify-between items-center hover:bg-[#1c2732] transition shadow-md">
+            
             <div class="flex items-center space-x-4">
                 {% if user.avatar %}
-                <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar de {{ user.username }}"
-                    class="w-12 h-12 rounded-full border-2 border-[#1DA1F2] object-cover">
+                    <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" 
+                         alt="Avatar de {{ user.username }}" 
+                         class="w-12 h-12 rounded-full border-2 border-[#1DA1F2] object-cover">
                 {% else %}
-                <div
-                    class="w-12 h-12 rounded-full border-2 border-[#1DA1F2] flex items-center justify-center text-[#1DA1F2] font-bold">
-                    {{ user.username|first|upper }}
-                </div>
+                    <div class="w-12 h-12 rounded-full border-2 border-[#1DA1F2] flex items-center justify-center text-[#1DA1F2] font-bold">
+                        {{ user.username|first|upper }}
+                    </div>
                 {% endif %}
 
-                {% if user.isBanned %}
-                <span class="text-red-500">(Banni)</span>
-                {% elseif user.isActive %}
-                <span class="text-yellow-400">(Suspendu)</span>
-                {% endif %}
                 <div class="flex flex-col">
                     <span class="font-bold text-lg text-white">{{ user.username }}</span>
                     <span class="text-neutral-400 text-sm">Créé le {{ user.createdAt|date('d/m/Y H:i') }}</span>
                     <span class="text-neutral-400 text-sm">Rôle: {{ user.roles|join(', ') }}</span>
+
+                    {% if user.isBanned %}
+                        <span class="text-red-500 font-semibold">(Banni)</span>
+                    {% elseif user.isActive %}
+                        <span class="text-yellow-400 font-semibold">(Suspendu)</span>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="flex space-x-3">
-                <form action="{{ path('app_admin_ban_user', {id: user.id}) }}" method="post"
-                    onsubmit="return confirm('Voulez-vous vraiment bannir cet utilisateur ?');">
-                    <button type="submit"
-                        class="flex items-center px-4 py-2 bg-[#E0245E] hover:bg-red-700 text-white rounded-xl font-semibold transition">
-                        <i class="fa-solid fa-ban mr-2"></i> Bannir
-                    </button>
-                </form>
+                {% if user.isBanned %}
+                    <form action="{{ path('app_admin_unban_user', {id: user.id}) }}" method="post"
+                          onsubmit="return confirm('Voulez-vous vraiment débannir cet utilisateur ?');">
+                        <button type="submit"
+                                class="flex items-center px-4 py-2 bg-[#1DA1F2] hover:bg-blue-600 text-white rounded-xl font-semibold transition">
+                            <i class="fa-solid fa-unlock mr-2"></i> Débannir
+                        </button>
+                    </form>
+                {% else %}
+                    <form action="{{ path('app_admin_ban_user', {id: user.id}) }}" method="post"
+                          onsubmit="return confirm('Voulez-vous vraiment bannir cet utilisateur ?');">
+                        <button type="submit"
+                                class="flex items-center px-4 py-2 bg-[#E0245E] hover:bg-red-700 text-white rounded-xl font-semibold transition">
+                            <i class="fa-solid fa-ban mr-2"></i> Bannir
+                        </button>
+                    </form>
+                {% endif %}
 
-                <form action="{{ path('app_admin_disable_user', {id: user.id}) }}" method="post"
-                    onsubmit="return confirm('Voulez-vous vraiment restreindre cet utilisateur ?');">
-                    <button type="submit"
-                        class="flex items-center px-4 py-2 bg-[#1DA1F2] hover:bg-blue-600 text-white rounded-xl font-semibold transition">
-                        <i class="fa-solid fa-user-slash mr-2"></i> Suspendre
-                    </button>
-                </form>
+                {% if user.isActive %}
+                    <form action="{{ path('app_admin_enable_user', {id: user.id}) }}" method="post"
+                          onsubmit="return confirm('Voulez-vous vraiment réactiver cet utilisateur ?');">
+                        <button type="submit"
+                                class="flex items-center px-4 py-2 bg-[#1DA1F2] hover:bg-blue-600 text-white rounded-xl font-semibold transition">
+                            <i class="fa-solid fa-user-check mr-2"></i> Réactiver
+                        </button>
+                    </form>
+                {% else %}
+                    <form action="{{ path('app_admin_disable_user', {id: user.id}) }}" method="post"
+                          onsubmit="return confirm('Voulez-vous vraiment suspendre cet utilisateur ?');">
+                        <button type="submit"
+                                class="flex items-center px-4 py-2 bg-[#1DA1F2] hover:bg-blue-600 text-white rounded-xl font-semibold transition">
+                            <i class="fa-solid fa-user-slash mr-2"></i> Suspendre
+                        </button>
+                    </form>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="text-neutral-400 mt-10 text-center text-lg">
-        Aucun utilisateur trouvé...
-    </div>
+        <div class="text-neutral-400 mt-10 text-center text-lg">
+            Aucun utilisateur trouvé...
+        </div>
     {% endif %}
 </div>
 {% endblock %}
