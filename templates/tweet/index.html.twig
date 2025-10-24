@@ -24,7 +24,7 @@
 	<div class="w-full max-w-2xl space-y-4">
 		{% if tweets|length %}
 		{% for tweet in tweets %}
-		{% if tweet.user.isBanned %}
+		{% if not tweet.user.isBanned %}
 		<div class="p-4 bg-[#15202B] border border-neutral-700 rounded-xl hover:bg-[#192734] transition">
 			<div class="flex justify-between items-start">
 				<div class="flex items-center space-x-3">
