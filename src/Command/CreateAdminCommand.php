@@ -40,7 +40,7 @@ class CreateAdminCommand extends Command
         $user->setRoles(["ROLE_ADMIN"]);
         $user->setPassword($this->hasher->hashPassword($user, $plainPassword));
         $user->setUsername($username);
-        $user->setIsActive(true);
+        $user->setIsActive(false);
         $user->setIsBanned(false);
 
         $this->em->persist($user);
