@@ -68,7 +68,7 @@ Système d’abonnement entre utilisateurs
 
 Fil d’actualité personnalisé (tweets des utilisateurs suivis)
 
-Interface d’administration (gestion des utilisateurs et des tweets)
+Interface d’administration (gestion des utilisateurs, des tweets et des signalements)
 
 Interface responsive adaptée aux mobiles:
 
@@ -79,6 +79,9 @@ Interface responsive adaptée aux mobiles:
 - 3	En tant qu’utilisateur connecté, je peux publier un tweet	
 - 4	En tant qu’utilisateur, je peux voir les tweets des autres	
 - 5	En tant qu’utilisateur, je peux suivre ou ne plus suivre quelqu’un	
-- 6	En tant qu’utilisateur, je peux liker un tweet	
-- 7	En tant qu’administrateur, je peux gérer les utilisateurs et les tweets	
-- 8	En tant qu’utilisateur, je vois un fil d’actualité personnalisé
+- 6	En tant qu’utilisateur, je peux liker un tweet
+- 7	En tant qu’utilisateur, je vois un fil d’actualité personnalisé
+- 8	En tant qu’administrateur, je peux gérer les tweets
+- 9	En tant qu’administrateur, je peux gérer les signalements
+- 10 En tant qu’administrateur, je peux bannir/susprendre
+- 11 En tant qu'administrateur, je peux supprimer les tweets et les signalements
