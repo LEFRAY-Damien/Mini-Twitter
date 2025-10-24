@@ -52,7 +52,7 @@
     </div>
   </div>
 
-		<div class="w-1/3 m-auto mt-3">
+		<div class="w-1/3 m-auto mt-6 mb-6 ">
 			<ul class="hidden text-sm font-medium text-center text-gray-500 rounded-lg shadow-sm sm:flex dark:divide-gray-700 dark:text-gray-400">
 				<li class="w-full focus-within:z-10">
 					<a href="{{path('app_profile_tweets', {'id': user.id})}}" class="inline-block w-full py-4 bg-white border-s-0 border-gray-200 dark:border-gray-700 rounded-s-lg hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700" aria-current="page">Tweets</a>
@@ -63,7 +63,7 @@
 			</ul>
 		</div>
 
-		<div class="absolute left-1/2 transform -translate-x-1/2">
+		<div class="relative w-1/3 left-1/2 transform -translate-x-1/2">
 			{% for retweet in user.retweets %}
 
 				<div class="relative p-4 bg-[#15202B] text-white border-x border-b first:border-t border-neutral-700 w-130 hover:bg-[#192734] transition">
